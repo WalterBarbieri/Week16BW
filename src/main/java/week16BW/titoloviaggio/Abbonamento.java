@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import week16BW.emettitori.Emettitore;
 import week16BW.enu.Tipoabbonamento;
+import week16BW.tesserautente.Tessera;
 
 @Entity
 @Getter
@@ -27,6 +28,10 @@ public class Abbonamento extends Titolo_viaggio {
 	@ManyToOne
 	@JoinColumn(name = "emettitore_id", referencedColumnName = "codice_emettitore")
 	private Emettitore emettitore;
+
+	@ManyToOne
+	@JoinColumn(name = "abbonamenti_tessera", referencedColumnName = "codice_tessera")
+	private Tessera tessera;
 
 	// Definizione costruttore
 	public Abbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento) {

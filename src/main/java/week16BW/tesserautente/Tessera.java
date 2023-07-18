@@ -1,11 +1,16 @@
 package week16BW.tesserautente;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -14,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import week16BW.emettitori.Emettitore;
+import week16BW.titoloviaggio.Abbonamento;
 
 @Entity
 @Table(name = "tessere")
@@ -33,9 +39,12 @@ public class Tessera {
 	@OneToOne
 	private Utente utente;
 
-//	@ManyToOne
-//	@JoinColumn(name = "tessera_emettitore", referencedColumnName = "codice_emettitore", nullable = false)
-//	private Emettitore emettitore;
+	@ManyToOne
+	@JoinColumn(name = "tessera_emettitore", referencedColumnName = "codice_emettitore")
+	private Emettitore emettitore;
+
+	@OneToMany(mappedBy = "tessera")
+	private Set<Abbonamento> abbonamento = new HashSet<>();
 
 	public Tessera(LocalDate emissione_tessera, Utente utente, Emettitore emettitore) {
 		this.utente = utente;
