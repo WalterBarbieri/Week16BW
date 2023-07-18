@@ -8,10 +8,15 @@ import javax.persistence.EntityManagerFactory;
 import week16BW.emettitori.Distributore;
 import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
+import week16BW.enu.Tipoabbonamento;
 import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
 import week16BW.tesserautente.Utente;
 import week16BW.tesserautente.UtenteDAO;
+import week16BW.titoloviaggio.Abbonamento;
+import week16BW.titoloviaggio.AbbonamentoDAO;
+import week16BW.titoloviaggio.Biglietto;
+import week16BW.titoloviaggio.BigliettoDAO;
 import week16BW.utils.JpaUtil;
 
 public class Main {
@@ -22,6 +27,8 @@ public class Main {
 		UtenteDAO ud = new UtenteDAO(em);
 		TesseraDAO td = new TesseraDAO(em);
 		EmettitoreDAO ed = new EmettitoreDAO(em);
+		BigliettoDAO bd = new BigliettoDAO(em);
+		AbbonamentoDAO ad = new AbbonamentoDAO(em);
 
 		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 		Utente ut2 = new Utente("C", "A", LocalDate.of(1988, 07, 06));
@@ -37,6 +44,20 @@ public class Main {
 		Tessera tess2 = new Tessera(LocalDate.of(2023, 07, 14), ut2, emettitore2);
 		td.save(tess1);
 		td.save(tess2);
+
+		// Creazione istanze per biglietto
+		Biglietto biglietto1 = new Biglietto(LocalDate.of(2023, 4, 17));
+		Biglietto biglietto2 = new Biglietto(LocalDate.of(2023, 4, 19));
+		// Salvataggio biglietti a DB
+		bd.save(biglietto1);
+		bd.save(biglietto2);
+
+		// Creazione istanze per abbonamento
+		Abbonamento abbonamento1 = new Abbonamento(LocalDate.of(2023, 2, 14), Tipoabbonamento.MENSILE);
+		Abbonamento abbonamento2 = new Abbonamento(LocalDate.of(2023, 4, 27), Tipoabbonamento.SETTIMANALE);
+		// Salvataggio abbonamenti a DB
+		ad.save(abbonamento1);
+		ad.save(abbonamento2);
 
 		em.close();
 		emf.close();
