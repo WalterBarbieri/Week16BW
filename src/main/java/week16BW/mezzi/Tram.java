@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @DiscriminatorValue("Tram")
 public class Tram extends Mezzi {
-	public Tram(int nTratte, Stato stato) {
-		super(nTratte, stato);
+	public Tram(int n_tratte, Stato stato) {
+		super(n_tratte, stato);
 		this.setCapienza(100);
 	}
 

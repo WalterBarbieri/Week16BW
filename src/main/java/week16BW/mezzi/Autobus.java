@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @DiscriminatorValue("Autobus")
 public class Autobus extends Mezzi {
-	public Autobus(int nTratte, Stato stato) {
-		super(nTratte, stato);
+	public Autobus(int n_tratte, Stato stato) {
+		super(n_tratte, stato);
 		this.setCapienza(50);
 	}
 

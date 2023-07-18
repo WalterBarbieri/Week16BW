@@ -1,4 +1,4 @@
-package week16BW.entities;
+package week16BW.titoloviaggio;
 
 import java.time.LocalDate;
 
@@ -17,8 +17,8 @@ import lombok.Setter;
 public abstract class Titolo_viaggio {
 	@Id
 	@GeneratedValue
-	private long codiceUnivoco;
-	private LocalDate dataEmissione;
+	private long codice_univoco;
+	private LocalDate data_emissione;
 	private boolean active;
-	private LocalDate dataObliterazione;
+	private LocalDate data_obliterazione;
 }
