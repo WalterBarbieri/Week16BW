@@ -1,4 +1,4 @@
-package week16BW.entities;
+package week16BW.titoloviaggio;
 
 import java.time.LocalDate;
 

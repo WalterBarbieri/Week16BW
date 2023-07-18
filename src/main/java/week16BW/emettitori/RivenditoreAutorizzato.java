@@ -1,4 +1,4 @@
-package Emettitori;
+package week16BW.emettitori;
 
 import javax.persistence.Entity;
 
@@ -14,6 +14,6 @@ public class RivenditoreAutorizzato extends Emettitore {
 
 	@Override
 	public String toString() {
-		return "Rivenditore Autorizzato [ codice Emettitore=" + codiceEmettitore + "]" + "\n";
+		return "Rivenditore Autorizzato [ codice Emettitore=" + this.getCodice_emettitore() + "]" + "\n";
 	}
 }

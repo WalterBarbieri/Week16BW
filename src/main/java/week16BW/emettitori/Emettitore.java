@@ -1,4 +1,4 @@
-package Emettitori;
+package week16BW.emettitori;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -23,12 +23,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Emettitore {
 	@Id
-	@SequenceGenerator(name = "sequence2", sequenceName = "sequence2", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence2")
-	protected int codiceEmettitore;
+	@SequenceGenerator(name = "sequence4", sequenceName = "sequence4", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence4")
+	private int codice_emettitore;
 
 	@Override
 	public String toString() {
-		return "Emettitore [codiceEmettitore=" + codiceEmettitore + "]" + "\n";
+		return "Emettitore [codiceEmettitore=" + codice_emettitore + "]" + "\n";
 	}
 }

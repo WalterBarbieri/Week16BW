@@ -1,4 +1,4 @@
-package TesseraUtente;
+package week16BW.tesserautente;
 
 import java.time.LocalDate;
 
@@ -23,24 +23,25 @@ public class Utente {
 	@Id
 	@SequenceGenerator(name = "sequence1", sequenceName = "sequence1", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence1")
-	protected int codiceTessera;
-	protected String nome;
-	protected String cognome;
-	protected LocalDate dataNascita;
+	private Long id;
+//	private int codice_tessera;
+	private String nome;
+	private String cognome;
+	private LocalDate data_nascita;
 
 	@OneToOne
-	protected Tessera tessera;
+	private Tessera codice_tessera;
 
-	public Utente(String nome, String cognome, LocalDate dataNascita) {
+	public Utente(String nome, String cognome, LocalDate data_nascita) {
 		this.nome = nome;
 		this.cognome = cognome;
-		this.dataNascita = dataNascita;
+		this.data_nascita = data_nascita;
 	}
 
 	@Override
 	public String toString() {
-		return "Utente [nome=" + nome + ", cognome=" + cognome + ", data di nascita=" + dataNascita
-				+ ", Codice della Tessera=" + codiceTessera + "]" + "\n";
+		return "Utente [nome=" + nome + ",\n cognome=" + cognome + ",\n data di nascita=" + data_nascita
+				+ ",\n Codice della Tessera=" + codice_tessera + "]" + "\n";
 	}
 }
 

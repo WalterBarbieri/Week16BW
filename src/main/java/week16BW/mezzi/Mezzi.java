@@ -25,17 +25,17 @@ import week16BW.tratta.Tratta;
 public abstract class Mezzi {
 	@Id
 	@GeneratedValue
-	private long codiceMezzo;
-	private int nTratte;
+	private long codice_mezzo;
+	private int n_tratte;
 	private int capienza;
 	private Stato stato;
 
 	@ManyToOne
-	@JoinColumn(name = "codiceTratta")
+	@JoinColumn(name = "codice_tratta")
 	private Tratta tratta;
 
-	public Mezzi(int nTratte, Stato stato) {
-		this.nTratte = nTratte;
+	public Mezzi(int n_tratte, Stato stato) {
+		this.n_tratte = n_tratte;
 		this.stato = stato;
 	}
 
