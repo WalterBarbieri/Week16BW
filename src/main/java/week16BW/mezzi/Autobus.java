@@ -6,15 +6,17 @@ import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @DiscriminatorValue("Autobus")
 public class Autobus extends Mezzi {
-	public Autobus(int n_tratte, Stato stato) {
-		super(n_tratte, stato);
+	public Autobus(Stato stato) {
+		super(stato);
 		this.setCapienza(50);
 	}
 
