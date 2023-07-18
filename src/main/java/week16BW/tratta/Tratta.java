@@ -10,12 +10,14 @@ import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import week16BW.mezzi.Mezzi;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Tratta {
 	@Id
 	@GeneratedValue
@@ -23,15 +25,13 @@ public class Tratta {
 	private String partenza;
 	private String capolinea;
 	private Double t_medio;
-	private Double t_effettivo;
 	@OneToMany(mappedBy = "tratta")
 	private List<Mezzi> mezzi;
 
-	public Tratta(String partenza, String capolinea, Double t_medio, Double t_effettivo) {
+	public Tratta(String partenza, String capolinea, Double t_medio) {
 		this.partenza = partenza;
 		this.capolinea = capolinea;
 		this.t_medio = t_medio;
-		this.t_effettivo = t_effettivo;
 	}
 
 }
