@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import week16BW.titoloviaggio.Biglietto;
 import week16BW.tratta.StoricoTratte;
 import week16BW.tratta.Tratta;
 
@@ -46,6 +47,11 @@ public abstract class Mezzi {
 
 	@OneToMany(mappedBy = "mezzo")
 	private List<StoricoTratte> storico_tratte;
+
+//	@OneToMany(mappedBy = "mezzo")
+//	private List<Abbonamento> abbonamenti;
+	@OneToMany(mappedBy = "mezzo")
+	private List<Biglietto> biglietti;
 
 	public Mezzi(Stato stato) {
 		this.n_tratte = 0;

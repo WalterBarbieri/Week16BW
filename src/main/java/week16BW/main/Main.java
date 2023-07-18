@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import week16BW.emettitori.Distributore;
 import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
+import week16BW.enu.Tipoabbonamento;
 import week16BW.mezzi.Autobus;
 import week16BW.mezzi.Mezzi;
 import week16BW.mezzi.MezziDao;
@@ -43,21 +44,12 @@ public class Main {
 		MezziDao md = new MezziDao(em);
 		TrattaDao trd = new TrattaDao(em);
 
-		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
-		Utente ut2 = new Utente("C", "A", LocalDate.of(1988, 07, 06));
-//		ud.save(ut1);
-//		ud.save(ut2);
-
-		Tessera tess1 = new Tessera("B", "G", LocalDate.of(2021, 04, 02), ut1);
-		Tessera tess2 = new Tessera("C", "A", LocalDate.of(2023, 07, 14), ut2);
-//		td.save(tess1);
-//		td.save(tess2);
-
 		Emettitore emettitore1 = new Emettitore();
 
 		Distributore emettitore2 = new Distributore(true);
+		ed.save(emettitore1);
 		ed.save(emettitore2);
-	    
+
 		Tessera tess1 = new Tessera(LocalDate.of(2021, 04, 02), ut1, emettitore1);
 		Tessera tess2 = new Tessera(LocalDate.of(2023, 07, 14), ut2, emettitore2);
 		td.save(tess1);
@@ -76,14 +68,12 @@ public class Main {
 		// Salvataggio abbonamenti a DB
 		ad.save(abbonamento1);
 		ad.save(abbonamento2);
-//		ed.save(emettitore1);
-//		ed.save(emettitore2);
 
 		Tratta route1 = new Tratta("Punto A", "Punto B", 20.0);
 		Tratta route2 = new Tratta("Punto C", "Punto D", 27.0);
 
-//		trd.saveTratta(route1);
-//		trd.saveTratta(route2);
+		trd.saveTratta(route1);
+		trd.saveTratta(route2);
 
 		Autobus bus1 = new Autobus(Stato.ATTIVO);
 		Tram tram1 = new Tram(Stato.MANUTENZIONE);
@@ -91,13 +81,13 @@ public class Main {
 		bus1.setTratta(route1);
 		tram1.setTratta(route2);
 
-		Mezzi autobus1 = md.getMezzoByCodice(3);
+		md.saveMezzo(bus1);
+		md.saveMezzo(tram1);
 
-//		md.saveMezzo(bus1);
-//		md.saveMezzo(tram1);
-//		for (int i = 0; i < 15; i++) {
-//			md.mezzoCorsa(autobus1);
-//		}
+		Mezzi autobus1 = md.getMezzoByCodice(3);
+		for (int i = 0; i < 15; i++) {
+			md.mezzoCorsa(autobus1);
+		}
 		md.printStoricoCorse(bus1);
 
 		em.close();
