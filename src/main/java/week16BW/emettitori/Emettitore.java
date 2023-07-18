@@ -27,6 +27,9 @@ public class Emettitore {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence4")
 	private int codice_emettitore;
 
+//	@OneToMany(mappedBy = "emettitore")
+//	private Set<Tessera> tessera;
+
 	@Override
 	public String toString() {
 		return "Emettitore [codiceEmettitore=" + codice_emettitore + "]" + "\n";

@@ -3,8 +3,12 @@ package week16BW.tesserautente;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TesseraDAO {
 	private final EntityManager em;
+	private static Logger log = LoggerFactory.getLogger(TesseraDAO.class);
 
 	public TesseraDAO(EntityManager em) {
 		this.em = em;
@@ -15,7 +19,7 @@ public class TesseraDAO {
 		t.begin();
 		em.persist(e);
 		t.commit();
-		System.out.println("Tessera salvata!");
+		log.info("Tessera salvata!");
 	}
 
 	public Utente findByCodiceTessera(Long codice_tessera) {
@@ -23,7 +27,7 @@ public class TesseraDAO {
 		if (trova != null) {
 			return trova;
 		} else {
-			System.out.println("Tessera non trovata");
+			log.info("Tessera non trovata");
 		}
 		return trova;
 	}

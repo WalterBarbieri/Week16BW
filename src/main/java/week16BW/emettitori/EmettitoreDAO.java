@@ -3,9 +3,13 @@ package week16BW.emettitori;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EmettitoreDAO {
 	private final EntityManager em;
 
+	private static Logger log = LoggerFactory.getLogger(EmettitoreDAO.class);
 	public EmettitoreDAO(EntityManager em) {
 		this.em = em;
 	}
@@ -15,7 +19,7 @@ public class EmettitoreDAO {
 		t.begin();
 		em.persist(e);
 		t.commit();
-		System.out.println("Emettitore salvato!");
+		log.info("Emettitore salvato!");
 	}
 
 	public Emettitore findByCodiceTessera(Long codice_emettitore) {
@@ -23,7 +27,7 @@ public class EmettitoreDAO {
 		if (trova != null) {
 			return trova;
 		} else {
-			System.out.println("Emettitore non trovato");
+			log.info("Emettitore non trovato");
 		}
 		return trova;
 	}

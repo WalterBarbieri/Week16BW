@@ -29,8 +29,8 @@ public class Utente {
 	private String cognome;
 	private LocalDate data_nascita;
 
-	@OneToOne
-	private Tessera codice_tessera;
+	@OneToOne(mappedBy = "utente")
+	private Tessera tessera;
 
 	public Utente(String nome, String cognome, LocalDate data_nascita) {
 		this.nome = nome;
@@ -41,7 +41,7 @@ public class Utente {
 	@Override
 	public String toString() {
 		return "Utente [nome=" + nome + ",\n cognome=" + cognome + ",\n data di nascita=" + data_nascita
-				+ ",\n Codice della Tessera=" + codice_tessera + "]" + "\n";
+				+ "]" + "\n";
 	}
 }
 

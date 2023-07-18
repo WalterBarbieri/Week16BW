@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import week16BW.emettitori.Emettitore;
 
 @Entity
 @Table(name = "tessere")
@@ -24,26 +25,35 @@ public class Tessera {
 	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
 	private int codice_tessera;
-	private String nome;
-	private String cognome;
+//	private String nome;
+//	private String cognome;
 	private LocalDate emissione_tessera;
 	private LocalDate scadenza_tessera;
 	
-
-	@OneToOne(mappedBy = "codice_tessera")
+	@OneToOne
 	private Utente utente;
 
-	public Tessera(String nome, String cognome, LocalDate emissione_tessera, Utente utente) {
+//	@ManyToOne
+//	@JoinColumn(name = "tessera_emettitore", referencedColumnName = "codice_emettitore", nullable = false)
+//	private Emettitore emettitore;
+
+	public Tessera(LocalDate emissione_tessera, Utente utente, Emettitore emettitore) {
 		this.utente = utente;
-		this.nome = nome;
-		this.cognome = cognome;
+//		this.nome = nome;
+//		this.cognome = cognome;
 		this.emissione_tessera = emissione_tessera;
 		this.scadenza_tessera = this.emissione_tessera.plusDays(365);
+		this.emettitore = emettitore;
 	}
 
 	@Override
+//	public String toString() {
+//		return "Tessera [nome=" + nome + ",\n cognome=" + cognome + ",\n Codice Tessera=" + codice_tessera
+//				+ ",\n emissione della Tessera=" + emissione_tessera + ", \n scadenza della Tessera=" + scadenza_tessera
+//				+ "]" + "\n";
+//	}
 	public String toString() {
-		return "Tessera [nome=" + nome + ",\n cognome=" + cognome + ",\n Codice Tessera=" + codice_tessera
+		return "Tessera [ Codice Tessera=" + codice_tessera
 				+ ",\n emissione della Tessera=" + emissione_tessera + ", \n scadenza della Tessera=" + scadenza_tessera
 				+ "]" + "\n";
 	}

@@ -27,16 +27,17 @@ public class Main {
 		Utente ut2 = new Utente("C", "A", LocalDate.of(1988, 07, 06));
 		ud.save(ut1);
 		ud.save(ut2);
-	    
-		Tessera tess1 = new Tessera("B", "G", LocalDate.of(2021, 04, 02), ut1);
-		Tessera tess2 = new Tessera("C", "A", LocalDate.of(2023, 07, 14), ut2);
-		td.save(tess1);
-		td.save(tess2);
 
 		Emettitore emettitore1 = new Emettitore();
 		ed.save(emettitore1);
 		Distributore emettitore2 = new Distributore(true);
 		ed.save(emettitore2);
+	    
+		Tessera tess1 = new Tessera(LocalDate.of(2021, 04, 02), ut1, emettitore1);
+		Tessera tess2 = new Tessera(LocalDate.of(2023, 07, 14), ut2, emettitore2);
+		td.save(tess1);
+		td.save(tess2);
+
 		em.close();
 		emf.close();
 	}
