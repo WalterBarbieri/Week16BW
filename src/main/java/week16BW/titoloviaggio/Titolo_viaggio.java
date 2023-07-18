@@ -5,12 +5,14 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,4 +23,12 @@ public abstract class Titolo_viaggio {
 	private LocalDate data_emissione;
 	private boolean active;
 	private LocalDate data_obliterazione;
+
+//	@ManyToOne
+//	@JoinColumn(name = "emettitore_id", referencedColumnName = "codice_emettitore")
+//	private Emettitore emettitore;
+
+	public Titolo_viaggio(LocalDate data_emissione) {
+		this.data_emissione = data_emissione;
+	}
 }
