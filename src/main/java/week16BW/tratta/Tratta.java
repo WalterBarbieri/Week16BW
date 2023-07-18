@@ -10,14 +10,13 @@ import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import week16BW.mezzi.Mezzi;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 public class Tratta {
 	@Id
 	@GeneratedValue
@@ -32,6 +31,12 @@ public class Tratta {
 		this.partenza = partenza;
 		this.capolinea = capolinea;
 		this.t_medio = t_medio;
+	}
+
+	@Override
+	public String toString() {
+		return "Tratta [Codice Tratta = " + codice_tratta + "Partenza = " + partenza + ", Capolinea = " + capolinea
+				+ ", Tempo Medio = " + t_medio + "]";
 	}
 
 }

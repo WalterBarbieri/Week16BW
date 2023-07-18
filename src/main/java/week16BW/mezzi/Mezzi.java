@@ -12,13 +12,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import week16BW.titoloviaggio.Biglietto;
 import week16BW.tratta.StoricoTratte;
 import week16BW.tratta.Tratta;
@@ -28,9 +28,12 @@ import week16BW.tratta.Tratta;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "mezzi")
+@NamedQuery(name = "selectAllNumeroTratte", query = "SELECT a FROM Mezzi a ")
+@NamedQuery(name = "selectByCodMezzo", query = "SELECT a FROM Mezzi a WHERE codice_mezzo = :codice_mezzo")
+@NamedQuery(name = "selectByCodTratta", query = "SELECT a FROM Mezzi a WHERE tratta.codice_tratta = :codice_tratta")
 public abstract class Mezzi {
 	@Id
 	@GeneratedValue
@@ -56,6 +59,12 @@ public abstract class Mezzi {
 	public Mezzi(Stato stato) {
 		this.n_tratte = 0;
 		this.stato = stato;
+	}
+
+	@Override
+	public String toString() {
+		return "Mezzo [Codice Mezzo = " + codice_mezzo + ", N. Tratte = " + n_tratte + ", Capienza = " + capienza
+				+ ", Stato = " + stato + ", Tratta = " + tratta + "]";
 	}
 
 }
