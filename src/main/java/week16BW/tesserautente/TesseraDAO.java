@@ -1,5 +1,7 @@
 package week16BW.tesserautente;
 
+import java.time.LocalDate;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -29,6 +31,26 @@ public class TesseraDAO {
 		} else {
 			log.info("Tessera non trovata");
 		}
+		return trova;
+	}
+
+	public Tessera rinnovoTessera(int codice_tessera) {
+		Tessera trova = em.find(Tessera.class, codice_tessera);
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		if (trova != null) {
+			if (trova.getScadenza_tessera().isBefore(LocalDate.now())) {
+				trova.setEmissione_tessera(LocalDate.now());
+				trova.setScadenza_tessera(LocalDate.now().plusDays(365));
+				em.persist(trova);
+				log.info("La tessera è stata rinnovata");
+			} else {
+				log.info("La tessera è ancora valida");
+			}
+		} else {
+			System.out.println("Tessera non trovata");
+		}
+		t.commit();
 		return trova;
 	}
 }
