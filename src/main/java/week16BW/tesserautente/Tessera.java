@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -26,6 +27,7 @@ import week16BW.titoloviaggio.Abbonamento;
 @Getter
 @Setter
 @NoArgsConstructor
+@NamedQuery(name = "selectAllTessere", query = "SELECT a FROM Tessera a ")
 public class Tessera {
 	@Id
 	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1)

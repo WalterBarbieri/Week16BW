@@ -1,9 +1,11 @@
 package week16BW.tesserautente;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +50,39 @@ public class TesseraDAO {
 				log.info("La tessera è ancora valida");
 			}
 		} else {
-			System.out.println("Tessera non trovata");
+			log.info("Tessera non trovata");
 		}
 		t.commit();
 		return trova;
 	}
+
+	public void rinnovoTutteTessereScadute() {
+		try {
+			TypedQuery<Tessera> getAllQuery = em.createNamedQuery("selectAllTessere", Tessera.class);
+		List<Tessera> tessere = getAllQuery.getResultList();
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		log.info("Elenco completo delle tessere");
+		for (Tessera tessera : tessere) {
+			if (tessera.getScadenza_tessera().isBefore(LocalDate.now())) {
+				tessera.setEmissione_tessera(LocalDate.now());
+				tessera.setScadenza_tessera(LocalDate.now().plusDays(365));
+				em.persist(tessera);
+				log.info("\"La tessera numero: " + tessera.getCodice_tessera() + " dell'utente "
+						+ tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome()
+						+ " è stata rinnovata fino a = "
+						+ tessera.getScadenza_tessera());
+			} else {
+				log.info("La tessera numero " + tessera.getCodice_tessera() + " dell'utente "
+						+ tessera.getUtente().getNome() + " " + tessera.getUtente().getCognome() + " è ancora valida");
+			}	
+			continue;
+		}
+		t.commit();
+	} catch (Exception e) {
+		e.printStackTrace();
+		log.info("Errore durante la ricerca dell'elenco tessere");
+	}
+}
+
 }
