@@ -24,7 +24,7 @@ public class TesseraDAO {
 		log.info("Tessera salvata!");
 	}
 
-	public Utente findByCodiceTessera(Long codice_tessera) {
+	public Utente findByCodiceTessera(long codice_tessera) {
 		Utente trova = em.find(Utente.class, codice_tessera);
 		if (trova != null) {
 			return trova;
@@ -34,7 +34,7 @@ public class TesseraDAO {
 		return trova;
 	}
 
-	public Tessera rinnovoTessera(int codice_tessera) {
+	public Tessera rinnovoTessera(long codice_tessera) {
 		Tessera trova = em.find(Tessera.class, codice_tessera);
 		EntityTransaction t = em.getTransaction();
 		t.begin();

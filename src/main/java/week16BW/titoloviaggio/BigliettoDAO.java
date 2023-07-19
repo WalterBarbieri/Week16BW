@@ -1,16 +1,15 @@
 package week16BW.titoloviaggio;
 
 import java.time.LocalDate;
-
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BigliettoDAO {
 	private final EntityManager em;
@@ -91,9 +90,28 @@ public class BigliettoDAO {
 
 		t.commit();
 		if (numeroModificati > 0) {
-			System.out.println("Biglietto vidimato");
+			log.info("Biglietto vidimato");
 		} else {
-			System.out.println("Biglietto non trovato");
+			log.info("Biglietto non trovato");
+		}
+	}
+
+	// ------------ Vidimazione biglietti1 --------------------
+
+	public void vidimazioneBiglietto1(long id, long codice_mezzo) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		dataVidimazioneBiglietto1(id);
+		aggiuntaMezzoInObliterazione1(id, codice_mezzo);
+		Query q = em.createQuery("UPDATE Biglietto b SET active = false WHERE codice_univoco = :id ");
+		q.setParameter("id", id);
+		int numeroModificati = q.executeUpdate();
+
+		t.commit();
+		if (numeroModificati > 0) {
+			log.info("Biglietto vidimato");
+		} else {
+			log.info("Biglietto non trovato");
 		}
 	}
 
@@ -111,12 +129,29 @@ public class BigliettoDAO {
 
 		t.commit();
 		if (numeroModificati > 0) {
-			System.out.println("Data vidimazione del biglietto registrata");
+			log.info("Data vidimazione del biglietto registrata");
 		} else {
-			System.out.println("Biglietto non trovato");
+			log.info("Biglietto non trovato");
 		}
 	}
 	
+	// ------------ Data vidimazione biglietti 1--------------------
+
+	public void dataVidimazioneBiglietto1(long id) {
+		LocalDate dataVidimazione = LocalDate.now();
+		Query q = em.createQuery(
+				"UPDATE Biglietto b SET data_obliterazione = :dataVidimazione WHERE codice_univoco = :id ");
+		q.setParameter("id", id);
+		q.setParameter("dataVidimazione", dataVidimazione);
+		int numeroModificati = q.executeUpdate();
+
+		if (numeroModificati > 0) {
+			log.info("Data vidimazione del biglietto registrata");
+		} else {
+			log.info("Biglietto non trovato");
+		}
+	}
+
 	// ------------ Biglietti emessi da un dato emettitore --------------------
 
 	public List<Biglietto> trovaBigliettiPerEmettitore(long id) {
@@ -170,5 +205,36 @@ public class BigliettoDAO {
 		getAllQuery.setParameter("inizio", inizio);
 		getAllQuery.setParameter("fine", fine);
 		return getAllQuery.getSingleResult();
+	}
+
+	// aggiunta mezzo in obliterazione
+	public void aggiuntaMezzoInObliterazione(long id, long codice_mezzo) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		Query q = em.createQuery(
+				"UPDATE Biglietto b SET mezzo_id = :codice_mezzo WHERE codice_univoco = :id ");
+		q.setParameter("id", id);
+		q.setParameter("codice_mezzo", codice_mezzo);
+		int numeroModificati = q.executeUpdate();
+
+		t.commit();
+		if (numeroModificati > 0) {
+			log.info("Mezzo salvato in vidimazione");
+		} else {
+			log.info("Biglietto o mezzo non trovato");
+		}
+	}
+
+	// Aggiunta mezzo 2
+	public void aggiuntaMezzoInObliterazione1(long id, long codice_mezzo) {
+		Query q = em.createQuery("UPDATE Biglietto b SET mezzo_id = :codice_mezzo WHERE codice_univoco = :id ");
+		q.setParameter("id", id);
+		q.setParameter("codice_mezzo", codice_mezzo);
+		int numeroModificati = q.executeUpdate();
+		if (numeroModificati > 0) {
+			log.info("Mezzo salvato in vidimazione");
+		} else {
+			log.info("Biglietto o mezzo non trovato");
+		}
 	}
 }

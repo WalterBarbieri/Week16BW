@@ -30,7 +30,7 @@ public class Tessera {
 	@Id
 	@SequenceGenerator(name = "sequence", sequenceName = "sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-	private int codice_tessera;
+	private long codice_tessera;
 //	private String nome;
 //	private String cognome;
 	private LocalDate emissione_tessera;
