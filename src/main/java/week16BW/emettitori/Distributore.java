@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Distributore extends Emettitore {
-	protected Boolean attivo;
+	private Boolean attivo;
 
 	public Distributore(Boolean attivo) {
 		super();

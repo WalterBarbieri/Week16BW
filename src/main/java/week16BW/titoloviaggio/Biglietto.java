@@ -27,8 +27,9 @@ public class Biglietto extends Titolo_viaggio {
 	private Mezzi mezzo;
 
 	// Definizione costruttore
-	public Biglietto(LocalDate data_emissione) {
+	public Biglietto(LocalDate data_emissione, Emettitore emettitore) {
 		super(data_emissione);
+		this.emettitore = emettitore;
 	}
 
 }

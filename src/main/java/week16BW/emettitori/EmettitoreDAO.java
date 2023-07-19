@@ -10,6 +10,7 @@ public class EmettitoreDAO {
 	private final EntityManager em;
 
 	private static Logger log = LoggerFactory.getLogger(EmettitoreDAO.class);
+
 	public EmettitoreDAO(EntityManager em) {
 		this.em = em;
 	}
@@ -22,7 +23,7 @@ public class EmettitoreDAO {
 		log.info("Emettitore salvato!");
 	}
 
-	public Emettitore findByCodiceTessera(Long codice_emettitore) {
+	public Emettitore findByCodiceEmettitore(long codice_emettitore) {
 		Emettitore trova = em.find(Emettitore.class, codice_emettitore);
 		if (trova != null) {
 			return trova;
@@ -31,4 +32,12 @@ public class EmettitoreDAO {
 		}
 		return trova;
 	}
+
+//	public List<Emettitore> findBigliettiByEmettByTempo(long codice_emettitore, ) {
+//		TypedQuery<Emettitore> query = em.createQuery("SELECT a FROM Emettitore a WHERE YEAR(a.data_emissione) = :mese",
+//				Emettitore.class);
+//		query.setParameter("anno", annopubbl);
+//		return query.getResultList();
+//	}
+
 }

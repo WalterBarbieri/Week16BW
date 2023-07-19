@@ -34,10 +34,11 @@ public class Abbonamento extends Titolo_viaggio {
 	private Tessera tessera;
 
 	// Definizione costruttore
-	public Abbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento) {
+	public Abbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento, Tessera tessera) {
 		super(data_emissione);
 		this.tipo = tipo_abbonamento;
 		this.data_scadenza = impostaScandenzaAbbonamento(data_emissione, tipo_abbonamento);
+		this.tessera = tessera;
 	}
 
 	private LocalDate impostaScandenzaAbbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento) {
