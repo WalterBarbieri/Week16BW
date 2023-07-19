@@ -1,16 +1,26 @@
 package week16BW.main;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
+import week16BW.enu.Tipoabbonamento;
 import week16BW.mezzi.MezziDao;
+import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
+import week16BW.tesserautente.Utente;
 import week16BW.tesserautente.UtenteDAO;
+import week16BW.titoloviaggio.Abbonamento;
 import week16BW.titoloviaggio.AbbonamentoDAO;
+import week16BW.titoloviaggio.Biglietto;
 import week16BW.titoloviaggio.BigliettoDAO;
 import week16BW.tratta.TrattaDao;
 import week16BW.utils.JpaUtil;
@@ -186,9 +196,101 @@ public class Main {
 //		bd.aggiuntaMezzoInObliterazione(1, 10);
 //		td.rinnovoTutteTessereScadute();
 
-		ad.controlloAbbonamento(3);
+//		ad.controlloAbbonamento(3);
 
-		em.close();
-		emf.close();
+		Scanner input = new Scanner(System.in);
+		operazione: while (true) {
+			log.info(
+					"Che azione vuoi eseguire: 1 aggiungi un utente, 2 compra un biglietto, 3 compra un abbonamento, 0 per finire");
+			String azione = input.nextLine();
+			if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 3) {
+				System.out.println("Hai inserito un numero non valido.");
+			}
+			switch (Integer.parseInt(azione)) {
+			case 0:
+				log.info("Hai finito");
+				break operazione;
+			case 1:
+				log.info("Inserisci il nome dell'utente");
+				String nome = input.nextLine();
+				log.info("Inserisci il cognome dell'utente");
+				String cognome = input.nextLine();
+				log.info("Inserisci la data di nascita dell'utente");
+				String dateString = input.nextLine();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				LocalDate dataNascita = LocalDate.parse(dateString, formatter);
+				Utente ut10 = new Utente(nome, cognome, dataNascita);
+				ud.save(ut10);
+				log.info(ut10.toString());
+				break;
+			case 2:
+				log.info("Sei da un distributore(1) o da un rivenditore automatico(2)?");
+				String tipoEmettitore = input.nextLine();
+				if (tipoEmettitore.equals("1")) {
+					Emettitore emettitore1 = new Emettitore();
+					ed.save(emettitore1);
+					Biglietto b1 = new Biglietto(LocalDate.now(), emettitore1);
+					// random emettitore nella lista distributori
+					bd.save(b1);
+				} else if (tipoEmettitore.equals("2")) {
+					Emettitore emettitore2 = new Emettitore();
+					ed.save(emettitore2);
+					Biglietto b1 = new Biglietto(LocalDate.now(), emettitore2);
+					bd.save(b1);
+					// random emettitore nella lista distributori
+				} else {
+					log.info("Selezione numero errata");
+				}
+				break;
+			case 3:
+				log.info("Inserisci il tuo numero tessera");
+				String numeroTessera = input.nextLine();
+				Long numeroTessera1 = Long.parseLong(numeroTessera);
+				Tessera tesseraSelezionata = td.findByCodiceTessera(numeroTessera1);
+				log.info("Sei da un distributore(1) o da un rivenditore automatico(2)?");
+				String tipoEmettitore2 = input.nextLine();
+				if (tipoEmettitore2.equals("1")) {
+					Emettitore emettitore1 = new Emettitore();
+					ed.save(emettitore1);
+					log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
+					String tipoAbbonamento = input.nextLine();
+					if (tipoAbbonamento.equals("1")) {
+						Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
+								tesseraSelezionata,
+								emettitore1);
+						ad.save(abb1);
+					} else if (tipoAbbonamento.equals("2")) {
+						Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE,
+								tesseraSelezionata,
+								emettitore1);
+						ad.save(abb2);
+					} else {
+						log.info("Selezione numero errata");
+					}
+				}
+				if (tipoEmettitore2.equals("2")) {
+					Emettitore emettitore1 = new Emettitore();
+					ed.save(emettitore1);
+					log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
+					String tipoAbbonamento = input.nextLine();
+					if (tipoAbbonamento.equals("1")) {
+						Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
+								tesseraSelezionata, emettitore1);
+						ad.save(abb1);
+					} else if (tipoAbbonamento.equals("2")) {
+						Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE, tesseraSelezionata,
+								emettitore1);
+						ad.save(abb2);
+					} else {
+						log.info("Selezione numero errata");
+					}
+					break;
+				}
+			}
+			// input.close();
+//			em.close();
+//			emf.close();
+		}
+
 	}
 }

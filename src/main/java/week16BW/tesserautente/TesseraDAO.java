@@ -26,8 +26,8 @@ public class TesseraDAO {
 		log.info("Tessera salvata!");
 	}
 
-	public Utente findByCodiceTessera(long codice_tessera) {
-		Utente trova = em.find(Utente.class, codice_tessera);
+	public Tessera findByCodiceTessera(long codice_tessera) {
+		Tessera trova = em.find(Tessera.class, codice_tessera);
 		if (trova != null) {
 			return trova;
 		} else {
