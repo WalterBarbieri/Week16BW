@@ -22,11 +22,13 @@ public abstract class Titolo_viaggio {
 	private boolean active;
 	private LocalDate data_obliterazione;
 
+
 //	@ManyToOne
 //	@JoinColumn(name = "emettitore_id", referencedColumnName = "codice_emettitore")
 //	private Emettitore emettitore;
 
 	public Titolo_viaggio(LocalDate data_emissione) {
 		this.data_emissione = data_emissione;
+
 	}
 }
