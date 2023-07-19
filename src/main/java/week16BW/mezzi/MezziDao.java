@@ -1,5 +1,6 @@
 package week16BW.mezzi;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,8 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import week16BW.manutenzione.Manutenzione;
+import week16BW.manutenzione.Tipo_manutenzione;
 import week16BW.tratta.StoricoTratte;
 
 public class MezziDao {
@@ -72,13 +75,40 @@ public class MezziDao {
 
 	}
 
-	// **************METODO PER CREARE E SALVARE N STORICO TRATTA RANDOM TRAMITE
+	// **************METODO PER CREARE E SALVARE N STORICO TRATTA E MANUTENZIONI
+	// RANDOM TRAMITE
 	// CODICE MEZZO***********************
 	public void mezzoCorsa(long codice_mezzo) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		Random rnd = new Random();
 		Mezzi mezzo = getMezzoByCodice(codice_mezzo);
+		if (mezzo.getN_tratte() % 10 == 0 && mezzo.getN_tratte() != 0) {
+			try {
+				Manutenzione manutenzione = new Manutenzione();
+				manutenzione.setMezzo(mezzo);
+				manutenzione.setTipo_manutenzione(Tipo_manutenzione.ORDINARIA);
+				LocalDate ora = LocalDate.now();
+				manutenzione.setInizio_manutenzione(ora);
+				int giorniManutenzione = rnd.nextInt(7) + 1;
+				manutenzione.setDurata_in_giorni(giorniManutenzione);
+				LocalDate fine_manutenzione = ora.plusDays(giorniManutenzione);
+				manutenzione.setFine_manutenzione(fine_manutenzione);
+				em.persist(manutenzione);
+				if (mezzo.getStorico_manutenzione() == null) {
+					mezzo.setStorico_manutenzione(new ArrayList<>());
+				}
+				mezzo.getStorico_manutenzione().add(manutenzione);
+				mezzo.setN_manutenzioni(mezzo.getN_manutenzioni() + 1);
+				mezzo.setN_tratte(mezzo.getN_tratte() + 1);
+				em.merge(mezzo);
+				log.info("Storico manutenzione relativo a " + manutenzione.getMezzo().getCodice_mezzo()
+						+ " inserito con successo");
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("Errore nell'inserimento della manutenzione");
+			}
+		} else {
 		try {
 			StoricoTratte storicoTratta = new StoricoTratte();
 
@@ -105,7 +135,7 @@ public class MezziDao {
 			e.printStackTrace();
 			log.info("Errore durante l'inserimento dello Storico Tratta");
 		}
-
+	}
 		t.commit();
 	}
 
