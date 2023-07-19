@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import week16BW.emettitori.Emettitore;
 import week16BW.mezzi.Mezzi;
 
@@ -16,6 +17,7 @@ import week16BW.mezzi.Mezzi;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Biglietto extends Titolo_viaggio {
 	// Definizione attributi
 	@ManyToOne
@@ -29,6 +31,7 @@ public class Biglietto extends Titolo_viaggio {
 	// Definizione costruttore
 	public Biglietto(LocalDate data_emissione) {
 		super(data_emissione);
+		this.setActive(true);
 	}
 
 }
