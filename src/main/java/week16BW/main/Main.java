@@ -140,16 +140,9 @@ public class Main {
 		// Metodo per la registrazioine della data di attivazione di un abbonamento
 		ad.dataAttivazioneAbbonamento(12);
 
-//		Mezzi autobus1 = md.getMezzoByCodice(3);
-//		for (int i = 0; i < 15; i++) {
-//			md.mezzoCorsa(autobus1);
-//		}
-//		md.printStoricoCorse(bus1);
-
 		// Tenere traccia del numero di biglietti vidimati in totale in un arco
 		// temporale per mezzo
-		System.out.println(
-				"\nTenere traccia dei biglietti vidimati in totale in un arco temporale per mezzo \n");
+		System.out.println("\nTenere traccia dei biglietti vidimati in totale in un arco temporale per mezzo \n");
 		bd.trovaBigliettiVimidatiPerMezzoInArcoTemporale(LocalDate.now().minusDays(3), LocalDate.now().plusDays(3), 7)
 				.forEach(b -> System.out.println(b.toString()));
 
@@ -162,8 +155,7 @@ public class Main {
 		// Numero biglietti vidimati in un arco temporale su un Mezzo
 		System.out.println("\nNumero di biglietti vidimati in totale in un arco temporale su un mezzo \n");
 		long numeroBigliettiVidimatiSuMezzoInArcoTemporale = bd.numeroBigliettiVimidatiPerMezzoInArcoTemporale(
-				LocalDate.now().minusDays(3),
-				LocalDate.now().plusDays(3), 7);
+				LocalDate.now().minusDays(3), LocalDate.now().plusDays(3), 7);
 		System.out.println(numeroBigliettiVidimatiSuMezzoInArcoTemporale);
 
 		// // Numero biglietti vidimati in un arco temporale in totale
@@ -171,11 +163,10 @@ public class Main {
 		long numeroBigliettiVidimatiInArcoTemporale = bd
 				.numeroBigliettiVimidatiInArcoTemporale(LocalDate.now().minusDays(3), LocalDate.now().plusDays(3));
 		System.out.println(numeroBigliettiVidimatiInArcoTemporale);
-		
+
 		// Biglietti stampati per emettitore
 		System.out.println("\nBiglietti per emettitore\n");
 		bd.trovaBigliettiPerEmettitore(4).forEach(b -> System.out.println(b.toString()));
-		
 
 		em.close();
 		emf.close();
