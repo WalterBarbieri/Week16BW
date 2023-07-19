@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import week16BW.manutenzione.Manutenzione;
 import week16BW.titoloviaggio.Biglietto;
 import week16BW.tratta.StoricoTratte;
 import week16BW.tratta.Tratta;
@@ -40,6 +41,7 @@ public abstract class Mezzi {
 
 	private long codice_mezzo;
 	private int n_tratte;
+	private int n_manutenzioni;
 	private int capienza;
 	@Enumerated(EnumType.STRING)
 	private Stato stato;
@@ -56,10 +58,15 @@ public abstract class Mezzi {
 	@OneToMany(mappedBy = "mezzo")
 	private List<Biglietto> biglietti;
 
+	@OneToMany(mappedBy = "mezzo")
+	private List<Manutenzione> storico_manutenzione;
+
 	public Mezzi(Stato stato) {
 		this.n_tratte = 0;
+		this.n_manutenzioni = 0;
 		this.stato = stato;
 	}
+
 
 	@Override
 	public String toString() {
