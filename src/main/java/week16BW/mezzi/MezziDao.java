@@ -156,6 +156,7 @@ public class MezziDao {
 						+ mezzo.getTratta().getCodice_tratta() + ", Numero Tratte Percorse = " + mezzo.getN_tratte());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("Errore durante la ricerca");
 		}
 
@@ -185,6 +186,7 @@ public class MezziDao {
 			log.info("Codice Mezzo = " + mezzo.getCodice_mezzo() + ", Codice Tratta = "
 					+ mezzo.getTratta().getCodice_tratta() + ", Numero Tratte Percorse = " + mezzo.getN_tratte());
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("Errore durante la ricerca");
 		}
 
@@ -205,7 +207,8 @@ public class MezziDao {
 						+ effettivo.getMezzo().getCodice_mezzo());
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			log.info("Errore durante la ricerca");
 		}
 	}
 
@@ -235,6 +238,7 @@ public class MezziDao {
 					+ ", Codice Tratta = " + el.getMezzo().getTratta().getCodice_tratta()
 					+ ", Tempo Percorrenza Effettivo = " + el.getT_effettivo()));
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("Errore durante la ricerca");
 		}
 	}

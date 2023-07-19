@@ -87,9 +87,9 @@ public class Main {
 //		md.saveMezzo(tram1);
 
 		// CREAZIONE RANDOM ISTANZE STORICO TRATTE
-		for (int i = 0; i < 15; i++) {
-			md.mezzoCorsa(80);
-		}
+//		for (int i = 0; i < 15; i++) {
+//			md.mezzoCorsa(80);
+//		}
 
 		// RICERCA NUMERO TRATTE:
 		// 1) TUTTE
