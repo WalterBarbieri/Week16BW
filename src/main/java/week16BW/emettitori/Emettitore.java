@@ -1,6 +1,5 @@
 package week16BW.emettitori;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +32,6 @@ public class Emettitore {
 	@SequenceGenerator(name = "sequence4", sequenceName = "sequence4", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence4")
 	private long codice_emettitore;
-	private LocalDate data_emissione;
 
 //	@OneToMany(mappedBy = "emettitore")
 //	private Set<Tessera> tessera;
