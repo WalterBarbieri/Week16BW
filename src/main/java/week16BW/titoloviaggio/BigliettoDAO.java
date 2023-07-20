@@ -34,6 +34,16 @@ public class BigliettoDAO {
 		System.out.println("Biglietto registrato correttamente\n");
 	}
 
+	public Biglietto findByCodiceUnivoco(long codice_univoco) {
+		Biglietto trova = em.find(Biglietto.class, codice_univoco);
+		if (trova != null) {
+			return trova;
+		} else {
+			log.info("Biglietto non trovata");
+		}
+		return trova;
+	}
+
 	public Long findBigliettiByEmettitore(long codice_emettitore) {
 		try {
 			TypedQuery<Long> query = em

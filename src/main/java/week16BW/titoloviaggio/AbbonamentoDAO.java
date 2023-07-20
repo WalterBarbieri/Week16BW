@@ -35,6 +35,16 @@ public class AbbonamentoDAO {
 		System.out.println("Abbonamento registrato correttamente\n");
 	}
 
+	public Abbonamento findByCodiceUnivoco(long codice_univoco) {
+		Abbonamento trova = em.find(Abbonamento.class, codice_univoco);
+		if (trova != null) {
+			return trova;
+		} else {
+			log.info("Abbonamento non trovato");
+		}
+		return trova;
+	}
+
 	// Attivazione Abbonamento
 	public void attivazioneAbbonamento(long id) {
 		EntityTransaction t = em.getTransaction();
@@ -106,13 +116,16 @@ public class AbbonamentoDAO {
 				log.info("L'abbonamento della tessera " + attivo.getTessera().getCodice_tessera() + " dell'utente "
 						+ attivo.getTessera().getUtente().getNome() + " " + attivo.getTessera().getUtente().getCognome()
 						+ " non è attivo o è scaduto");
+				log.info("Ti becchi la multa! 100 euro volano via dal portafoglio!");
 			} else {
 				log.info("L'abbonamento della tessera " + attivo.getTessera().getCodice_tessera() + " dell'utente "
 						+ attivo.getTessera().getUtente().getNome() + " " + attivo.getTessera().getUtente().getCognome()
 						+ " è valido valida");
+				log.info("Sei salvo! Sei stato fortunato!");
 			}
 		} else {
 			log.info("L'abbonamento non è stato attivato");
+			log.info("Ti becchi la multa! 100 euro volano via dal portafoglio!");
 		}
 		} catch (Exception e) {
 			e.printStackTrace();

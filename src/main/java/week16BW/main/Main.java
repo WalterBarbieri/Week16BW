@@ -207,9 +207,10 @@ public class Main {
 
 		Scanner input = new Scanner(System.in);
 		utilizzatore: while (true) {
-			log.info("Chi sei: 1 utente, 2 Ufficio biglietteria, 3 amministratore, 0 per uscire");
+			log.info(
+					"Chi sei:\n 1 utente,\n 2 Ufficio biglietteria,\n 3 amministratore,\n 4 controllore,\n 0 per uscire");
 			String persona = input.nextLine();
-			if (Integer.parseInt(persona) < 0 || Integer.parseInt(persona) > 3) {
+			if (Integer.parseInt(persona) < 0 || Integer.parseInt(persona) > 4) {
 				log.info("Hai inserito un numero non valido.");
 			}
 			switch (Integer.parseInt(persona)) {
@@ -219,7 +220,7 @@ public class Main {
 			case 1:
 				operazione: while (true) {
 					log.info(
-							"Che azione vuoi eseguire: 1 compra un biglietto, 2 compra un abbonamento,\n 3 obliterare il biglietto, 4 attiva abbonamento, 0 per finire");
+							"Che azione vuoi eseguire:\n 1 compra un biglietto,\n 2 compra un abbonamento,\n 3 obliterare il biglietto,\n 4 attiva abbonamento,\n 0 per finire");
 					String azione = input.nextLine();
 					if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 4) {
 						log.info("Hai inserito un numero non valido.");
@@ -300,15 +301,25 @@ public class Main {
 							log.info(
 									"Oblitera il biglietto: inserisci il codice del biglietto, lo trovi scritto in alto a desta");
 						String codiceBiglietto = input.nextLine();
-						log.info("Inserisci il numero del tuo mezzo");
+						Biglietto cercaBiglietto = bd.findByCodiceUnivoco(Long.parseLong(codiceBiglietto));
+						if (cercaBiglietto.getData_obliterazione() != null) {
+							log.info("Il biglietto è già stato usato");
+						} else {
+							log.info("Inserisci il numero del tuo mezzo");
 						String codiceMezzo = input.nextLine();
-						bd.vidimazioneBiglietto1(Long.parseLong(codiceBiglietto), Long.parseLong(codiceMezzo));
+							bd.vidimazioneBiglietto1(Long.parseLong(codiceBiglietto), Long.parseLong(codiceMezzo));
+						}
 						break;
 					case 4:
 						log.info("Attiva l'abbonamento: inserisci il codice del tuo abbonamento");
 						String codiceAbbonamento = input.nextLine();
+						Abbonamento cercaAbbonamento = ad.findByCodiceUnivoco(Long.parseLong(codiceAbbonamento));
+						if (cercaAbbonamento.getData_obliterazione() != null) {
+							log.info("Il tuo abbonamento è già stato attivato!");
+						} else {
 						ad.attivazioneAbbonamento(Long.parseLong(codiceAbbonamento));
 						ad.dataScadenzaAbbonamento(Long.parseLong(codiceAbbonamento));
+					}
 						break;
 					default:
 						log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
@@ -320,7 +331,7 @@ public class Main {
 			case 2:
 				ufficioBiglietteria: while (true) {
 					log.info(
-							"Che azione vuoi eseguire: 1 aggiungi un utente, 2 crea una tessera, 3 rinnovare la tessera, 4 info tratta, 0 per finire");
+							"Che azione vuoi eseguire:\n 1 aggiungi un utente,\n 2 crea una tessera,\n 3 rinnovare la tessera,\n 4 info tratta,\n 0 per finire");
 					String azione2 = input.nextLine();
 					if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 4) {
 						log.info("Hai inserito un numero non valido.");
@@ -555,6 +566,34 @@ public class Main {
 						break;
 					}
 					break;
+				}
+				break;
+			case 4:
+				log.info("Sei stato beccato dal controllore! Hai un abbonameno o un biglietto valido?");
+				log.info(
+						"Inserisci:\n 1 per mostrare il biglietto,\n 2 per mostrare l'abbonamento,\n Qualunue altro numero per tentare la fuga!");
+				String evitaLaMulta = input.nextLine();
+				if (evitaLaMulta.equals("1")) {
+					log.info("Hai validato il tuo biglietto?");
+					log.info("Inserisci il tuo codice biglietto");
+					String evitaMultaBiglietto = input.nextLine();
+					Biglietto cercaBiglietto1 = bd.findByCodiceUnivoco(Long.parseLong(evitaMultaBiglietto));
+					if (cercaBiglietto1.getData_obliterazione() != null) {
+						if (cercaBiglietto1.getData_obliterazione().equals(LocalDate.now())) {
+							log.info("Il tuo biglietto è valido, sei salvo!");
+						} else {
+							log.info("Stai viaggiando con un biglietto vecchio! 100 euro volano via dal porafoglio!");
+						}
+					} else {
+						log.info("Furbetto, non hai validato il tuo biglietto... 100 euro volano via dal porafoglio!");
+					}
+				} else if (evitaLaMulta.equals("2")) {
+					log.info("Hai scelto l'abbonamento: inserisci il tuo codice di tessera");
+					String evitaLaMultaAbbonamento = input.nextLine();
+					ad.controlloAbbonamento(Long.parseLong(evitaLaMultaAbbonamento));
+				} else {
+					log.info(
+							"Tentativo fallito!!\n Totale Multa = 110 euro (10 euro in più per la tentata fuga!), \n Vergognati!");
 				}
 				break;
 			default:
