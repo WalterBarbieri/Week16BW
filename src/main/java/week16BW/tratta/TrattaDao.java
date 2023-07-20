@@ -31,4 +31,14 @@ public class TrattaDao {
 		}
 	}
 
+	public Tratta findByCodiceTratta(long codice_tratta) {
+		Tratta trova = em.find(Tratta.class, codice_tratta);
+		if (trova != null) {
+			return trova;
+		} else {
+			log.info("Tratta non trovata");
+		}
+		return trova;
+	}
+
 }

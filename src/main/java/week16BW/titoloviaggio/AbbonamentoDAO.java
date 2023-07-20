@@ -10,6 +10,8 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import week16BW.enu.Tipoabbonamento;
+
 public class AbbonamentoDAO {
 	private final EntityManager em;
 	private static Logger log = LoggerFactory.getLogger(AbbonamentoDAO.class);
@@ -67,27 +69,30 @@ public class AbbonamentoDAO {
 	}
 	
 	// Definiione data attivazione abbonamento Abbonamento
-//	public void dataScadenzaAbbonamento(long id) {
-//		TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE codice_univoco = :numero",
-//				Abbonamento.class);
-//		query.setParameter("numero", id);
-//		Abbonamento trovato = query.getSingleResult();
-//		LocalDate dataScadenza;
-//		if (trovato.getTipo().equals(Tipoabbonamento.SETTIMANALE)) {
-//			dataScadenza = LocalDate.now().plusDays(7);
-//		} else {
-//			dataScadenza = LocalDate.now().plusMonths(1);
-//		}
-//		Query q2 = em.createQuery("UPDATE Abbonamento a SET data_scadenza = :dataScadenza WHERE codice_univoco = :id ");
-//		q2.setParameter("id", id);
-//		q2.setParameter("dataScadenza", dataScadenza);
-//		int numeroModificati = q2.executeUpdate();
-//		if (numeroModificati > 0) {
-//			System.out.println("Data abbonamento attivato registrata");
-//		} else {
-//			System.out.println("Abbonamento non trovato");
-//		}
-//	}
+	public void dataScadenzaAbbonamento(long id) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE codice_univoco = :numero",
+				Abbonamento.class);
+		query.setParameter("numero", id);
+		Abbonamento trovato = query.getSingleResult();
+		LocalDate dataScadenza;
+		if (trovato.getTipo().equals(Tipoabbonamento.SETTIMANALE)) {
+			dataScadenza = LocalDate.now().plusDays(7);
+		} else {
+			dataScadenza = LocalDate.now().plusMonths(1);
+		}
+		Query q2 = em.createQuery("UPDATE Abbonamento a SET data_scadenza = :dataScadenza WHERE codice_univoco = :id ");
+		q2.setParameter("id", id);
+		q2.setParameter("dataScadenza", dataScadenza);
+		int numeroModificati = q2.executeUpdate();
+		if (numeroModificati > 0) {
+			System.out.println("Data abbonamento attivato registrata");
+		} else {
+			System.out.println("Abbonamento non trovato");
+		}
+		t.commit();
+	}
 
 	public void controlloAbbonamento(long abbonamenti_tessera) {
 		try {
