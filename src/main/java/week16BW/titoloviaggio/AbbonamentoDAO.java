@@ -37,6 +37,7 @@ public class AbbonamentoDAO {
 	public void attivazioneAbbonamento(long id) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
+		dataAttivazioneAbbonamento(id);
 		Query q = em.createQuery("UPDATE Abbonamento a SET active = true WHERE codice_univoco = :id ");
 		q.setParameter("id", id);
 		int numeroModificati = q.executeUpdate();
@@ -50,8 +51,6 @@ public class AbbonamentoDAO {
 
 	// Definiione data attivazione abbonamento Abbonamento
 	public void dataAttivazioneAbbonamento(long id) {
-		EntityTransaction t = em.getTransaction();
-		t.begin();
 		LocalDate dataAttivazione = LocalDate.now();
 		Query q2 = em
 				.createQuery(
@@ -59,7 +58,6 @@ public class AbbonamentoDAO {
 		q2.setParameter("id", id);
 		q2.setParameter("dataAttivazione", dataAttivazione);
 		int numeroModificati = q2.executeUpdate();
-		t.commit();
 		if (numeroModificati > 0) {
 			System.out.println("Data abbonamento attivato registrata");
 		} else {
@@ -68,6 +66,29 @@ public class AbbonamentoDAO {
 
 	}
 	
+	// Definiione data attivazione abbonamento Abbonamento
+//	public void dataScadenzaAbbonamento(long id) {
+//		TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE codice_univoco = :numero",
+//				Abbonamento.class);
+//		query.setParameter("numero", id);
+//		Abbonamento trovato = query.getSingleResult();
+//		LocalDate dataScadenza;
+//		if (trovato.getTipo().equals(Tipoabbonamento.SETTIMANALE)) {
+//			dataScadenza = LocalDate.now().plusDays(7);
+//		} else {
+//			dataScadenza = LocalDate.now().plusMonths(1);
+//		}
+//		Query q2 = em.createQuery("UPDATE Abbonamento a SET data_scadenza = :dataScadenza WHERE codice_univoco = :id ");
+//		q2.setParameter("id", id);
+//		q2.setParameter("dataScadenza", dataScadenza);
+//		int numeroModificati = q2.executeUpdate();
+//		if (numeroModificati > 0) {
+//			System.out.println("Data abbonamento attivato registrata");
+//		} else {
+//			System.out.println("Abbonamento non trovato");
+//		}
+//	}
+
 	public void controlloAbbonamento(long abbonamenti_tessera) {
 		try {
 			TypedQuery<Abbonamento> query = em
@@ -75,6 +96,7 @@ public class AbbonamentoDAO {
 					Abbonamento.class);
 			query.setParameter("numero", abbonamenti_tessera);
 			Abbonamento attivo = query.getSingleResult();
+			if (attivo.isActive()) {
 			if (attivo.getData_scadenza().isBefore(LocalDate.now())) {
 				log.info("L'abbonamento della tessera " + attivo.getTessera().getCodice_tessera() + " dell'utente "
 						+ attivo.getTessera().getUtente().getNome() + " " + attivo.getTessera().getUtente().getCognome()
@@ -84,6 +106,9 @@ public class AbbonamentoDAO {
 						+ attivo.getTessera().getUtente().getNome() + " " + attivo.getTessera().getUtente().getCognome()
 						+ " è valido valida");
 			}
+		} else {
+			log.info("L'abbonamento non è stato attivato");
+		}
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("Errore durante la ricerca dell'abbonamento");

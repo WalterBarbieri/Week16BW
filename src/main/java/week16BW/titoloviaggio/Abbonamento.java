@@ -38,15 +38,16 @@ public class Abbonamento extends Titolo_viaggio {
 			Emettitore emettitore) {
 		super(data_emissione);
 		this.tipo = tipo_abbonamento;
-		this.data_scadenza = impostaScandenzaAbbonamento(data_emissione, tipo_abbonamento);
+		// this.data_scadenza = impostaScandenzaAbbonamento(data_emissione,
+		// tipo_abbonamento);
 		this.tessera = tessera;
 		this.emettitore = emettitore;
 	}
 
-	private LocalDate impostaScandenzaAbbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento) {
-		if (tipo_abbonamento == Tipoabbonamento.SETTIMANALE)
-			return data_emissione.plusDays(7);
-		else
-			return data_emissione.plusMonths(1);
-	}
+//	private LocalDate impostaScandenzaAbbonamento(LocalDate data_emissione, Tipoabbonamento tipo_abbonamento) {
+//		if (tipo_abbonamento == Tipoabbonamento.SETTIMANALE)
+//			return data_emissione.plusDays(7);
+//		else
+//			return data_emissione.plusMonths(1);
+//	}
 }

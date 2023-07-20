@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
 import week16BW.enu.Tipoabbonamento;
+import week16BW.mezzi.Autobus;
 import week16BW.mezzi.MezziDao;
+import week16BW.mezzi.Stato;
+import week16BW.mezzi.Tram;
 import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
 import week16BW.tesserautente.Utente;
@@ -22,6 +25,7 @@ import week16BW.titoloviaggio.Abbonamento;
 import week16BW.titoloviaggio.AbbonamentoDAO;
 import week16BW.titoloviaggio.Biglietto;
 import week16BW.titoloviaggio.BigliettoDAO;
+import week16BW.tratta.Tratta;
 import week16BW.tratta.TrattaDao;
 import week16BW.utils.JpaUtil;
 
@@ -199,98 +203,236 @@ public class Main {
 //		ad.controlloAbbonamento(3);
 
 		Scanner input = new Scanner(System.in);
-		operazione: while (true) {
-			log.info(
-					"Che azione vuoi eseguire: 1 aggiungi un utente, 2 compra un biglietto, 3 compra un abbonamento, 0 per finire");
-			String azione = input.nextLine();
-			if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 3) {
-				System.out.println("Hai inserito un numero non valido.");
+		utilizzatore: while (true) {
+			log.info("Chi sei: 1 utente, 2 Ufficio biglietteria, 3 amministratore, 0 per uscire");
+			String persona = input.nextLine();
+			if (Integer.parseInt(persona) < 0 || Integer.parseInt(persona) > 2) {
+				log.info("Hai inserito un numero non valido.");
 			}
-			switch (Integer.parseInt(azione)) {
-			case 0:
+			switch (Integer.parseInt(persona)) {
+			case 0: 
 				log.info("Hai finito");
-				break operazione;
+				break utilizzatore;
 			case 1:
-				log.info("Inserisci il nome dell'utente");
-				String nome = input.nextLine();
-				log.info("Inserisci il cognome dell'utente");
-				String cognome = input.nextLine();
-				log.info("Inserisci la data di nascita dell'utente");
-				String dateString = input.nextLine();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				LocalDate dataNascita = LocalDate.parse(dateString, formatter);
-				Utente ut10 = new Utente(nome, cognome, dataNascita);
-				ud.save(ut10);
-				log.info(ut10.toString());
+				operazione: while (true) {
+					log.info(
+							"Che azione vuoi eseguire: 1 compra un biglietto, 2 compra un abbonamento,\n 3 obliterare il biglietto, 4 attiva abbonamento, 0 per finire");
+					String azione = input.nextLine();
+					if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 4) {
+						log.info("Hai inserito un numero non valido.");
+					}
+					switch (Integer.parseInt(azione)) {
+					case 0:
+						log.info("Hai finito");
+						break operazione;
+					case 1:
+						log.info("Sei da un distributore(1) o da un rivenditore auttorizzato(2)?");
+						String tipoEmettitore = input.nextLine();
+						if (tipoEmettitore.equals("1")) {
+							Emettitore emettitore1 = new Emettitore();
+							ed.save(emettitore1);
+							Biglietto b1 = new Biglietto(LocalDate.now(), emettitore1);
+							// random emettitore nella lista distributori
+							bd.save(b1);
+						} else if (tipoEmettitore.equals("2")) {
+							Emettitore emettitore2 = new Emettitore();
+							ed.save(emettitore2);
+							Biglietto b1 = new Biglietto(LocalDate.now(), emettitore2);
+							bd.save(b1);
+							// random emettitore nella lista distributori
+						} else {
+							log.info("Selezione numero errata");
+						}
+						break;
+					case 2:
+						log.info("Inserisci il tuo numero tessera");
+						String numeroTessera = input.nextLine();
+						Long numeroTessera1 = Long.parseLong(numeroTessera);
+						Tessera tesseraSelezionata = td.findByCodiceTessera(numeroTessera1);
+						log.info("Sei da un distributore(1) o da un rivenditore auttorizzato(2)?");
+						String tipoEmettitore2 = input.nextLine();
+						if (tipoEmettitore2.equals("1")) {
+							Emettitore emettitore1 = new Emettitore();
+							ed.save(emettitore1);
+							log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
+							String tipoAbbonamento = input.nextLine();
+							if (tipoAbbonamento.equals("1")) {
+								Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
+										tesseraSelezionata, emettitore1);
+								ad.save(abb1);
+								log.info(
+										"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
+												+ abb1.getCodice_univoco());
+							} else if (tipoAbbonamento.equals("2")) {
+								Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE,
+										tesseraSelezionata, emettitore1);
+								ad.save(abb2);
+								log.info(
+										"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
+												+ abb2.getCodice_univoco());
+							} else {
+								log.info("Selezione numero errata");
+							}
+						}
+						if (tipoEmettitore2.equals("2")) {
+							Emettitore emettitore1 = new Emettitore();
+							ed.save(emettitore1);
+							log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
+							String tipoAbbonamento = input.nextLine();
+							if (tipoAbbonamento.equals("1")) {
+								Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
+										tesseraSelezionata, emettitore1);
+								ad.save(abb1);
+							} else if (tipoAbbonamento.equals("2")) {
+								Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE, tesseraSelezionata,
+										emettitore1);
+								ad.save(abb2);
+							} else {
+								log.info("Selezione numero errata");
+							}
+						}
+							break;
+
+						case 3:
+							log.info(
+									"Oblitera il biglietto: inserisci il codice del biglietto, lo trovi scritto in alto a desta");
+						String codiceBiglietto = input.nextLine();
+						log.info("Inserisci il numero del tuo mezzo");
+						String codiceMezzo = input.nextLine();
+						bd.vidimazioneBiglietto1(Long.parseLong(codiceBiglietto), Long.parseLong(codiceMezzo));
+						break;
+					case 4:
+						log.info("Attiva l'abbonamento: inserisci il codice del tuo abbonamento");
+						String codiceAbbonamento = input.nextLine();
+						ad.attivazioneAbbonamento(Long.parseLong(codiceAbbonamento));
+//						ad.dataScadenzaAbbonamento(Long.parseLong(codiceAbbonamento));
+						break;
+					default:
+						log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
+						continue operazione;
+					}
+					
+				}
 				break;
 			case 2:
-				log.info("Sei da un distributore(1) o da un rivenditore automatico(2)?");
-				String tipoEmettitore = input.nextLine();
-				if (tipoEmettitore.equals("1")) {
-					Emettitore emettitore1 = new Emettitore();
-					ed.save(emettitore1);
-					Biglietto b1 = new Biglietto(LocalDate.now(), emettitore1);
-					// random emettitore nella lista distributori
-					bd.save(b1);
-				} else if (tipoEmettitore.equals("2")) {
-					Emettitore emettitore2 = new Emettitore();
-					ed.save(emettitore2);
-					Biglietto b1 = new Biglietto(LocalDate.now(), emettitore2);
-					bd.save(b1);
-					// random emettitore nella lista distributori
-				} else {
-					log.info("Selezione numero errata");
+				ufficioBiglietteria: while (true) {
+					log.info(
+							"Che azione vuoi eseguire: 1 aggiungi un utente, 2 crea una tessera, 3 rinnovare la tessera, 4 info tratta, 0 per finire");
+					String azione2 = input.nextLine();
+					if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 4) {
+						log.info("Hai inserito un numero non valido.");
+					}
+					switch (Integer.parseInt(azione2)) {
+					case 0:
+						log.info("Hai finito");
+						break ufficioBiglietteria;
+					case 1:
+						log.info("Inserisci il nome dell'utente");
+						String nome = input.nextLine();
+						log.info("Inserisci il cognome dell'utente");
+						String cognome = input.nextLine();
+						log.info("Inserisci la data di nascita dell'utente");
+						String dateString = input.nextLine();
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+						LocalDate dataNascita = LocalDate.parse(dateString, formatter);
+						Utente ut10 = new Utente(nome, cognome, dataNascita);
+						ud.save(ut10);
+						log.info(ut10.toString());
+						break;
+					case 2:
+//						LocalDate emissione_tessera, Utente utente, Emettitore emettitore
+						log.info("Inserisci l'id dell'utente");
+						String numeroid = input.nextLine();
+						Long idutente = Long.parseLong(numeroid);
+						Utente utenteSelezionato = ud.findById(idutente);
+						Emettitore emettitore1 = new Emettitore();
+						ed.save(emettitore1);
+						// Implementare random
+						Tessera tessera1 = new Tessera(LocalDate.now(), utenteSelezionato, emettitore1);
+						td.save(tessera1);
+						break;
+					case 3:
+						log.info("Inserisci il codice tessera per rinnovarla");
+						String numeroTessera = input.nextLine();
+						td.rinnovoTessera(Long.parseLong(numeroTessera));
+						break;
+					case 4:
+						log.info("Nuovo mezzo! Inserisci il tipo di mezzo, 1 Autobus, 2 Tram");
+						String mezzoScelto = input.nextLine();
+						if (mezzoScelto.equals("1")) {
+							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+							String statoMezzoScelto = input.nextLine();
+							if (statoMezzoScelto.equals("1")) {
+								Autobus nuovoAutobus = new Autobus(Stato.ATTIVO);
+								md.saveMezzo(nuovoAutobus);
+							} else if (statoMezzoScelto.equals("2")) {
+								Autobus nuovoAutobus = new Autobus(Stato.MANUTENZIONE);
+								md.saveMezzo(nuovoAutobus);
+							} else {
+								log.info("Il numero inserito non è valido");
+							}
+						} else if (mezzoScelto.equals("2")) {
+							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+							String statoMezzoScelto2 = input.nextLine();
+							if (statoMezzoScelto2.equals("1")) {
+								Tram nuovoAutobus = new Tram(Stato.ATTIVO);
+								md.saveMezzo(nuovoAutobus);
+							} else if (statoMezzoScelto2.equals("2")) {
+								Tram nuovoAutobus = new Tram(Stato.MANUTENZIONE);
+								md.saveMezzo(nuovoAutobus);
+							} else {
+								log.info("Il numero inserito non è valido");
+							}
+						}
+						break;
+					default:
+						log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
+						continue ufficioBiglietteria;
+					}
 				}
 				break;
 			case 3:
-				log.info("Inserisci il tuo numero tessera");
-				String numeroTessera = input.nextLine();
-				Long numeroTessera1 = Long.parseLong(numeroTessera);
-				Tessera tesseraSelezionata = td.findByCodiceTessera(numeroTessera1);
-				log.info("Sei da un distributore(1) o da un rivenditore automatico(2)?");
-				String tipoEmettitore2 = input.nextLine();
-				if (tipoEmettitore2.equals("1")) {
-					Emettitore emettitore1 = new Emettitore();
-					ed.save(emettitore1);
-					log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
-					String tipoAbbonamento = input.nextLine();
-					if (tipoAbbonamento.equals("1")) {
-						Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
-								tesseraSelezionata,
-								emettitore1);
-						ad.save(abb1);
-					} else if (tipoAbbonamento.equals("2")) {
-						Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE,
-								tesseraSelezionata,
-								emettitore1);
-						ad.save(abb2);
-					} else {
-						log.info("Selezione numero errata");
+				amministratore: while (true) {
+					log.info(
+							"Che azione vuoi eseguire: 1 controlla lista manutenzioni, 2 numero biglietti obliterati su un mezzo, "
+									+ "3 numero biglietti emessi da emettitore, 4 rinnova tutte le tessere, "
+									+ "5 mezzi che percorrono una tratta,6 tempo effettivo che un mezzo impiega,"
+									+ " 7 aggiungi una tratta, 8 aggiungi un mezzo, 0 per finire");
+					String azione3 = input.nextLine();
+					if (Integer.parseInt(azione3) < 0 || Integer.parseInt(azione3) > 8) {
+						log.info("Hai inserito un numero non valido.");
 					}
-				}
-				if (tipoEmettitore2.equals("2")) {
-					Emettitore emettitore1 = new Emettitore();
-					ed.save(emettitore1);
-					log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
-					String tipoAbbonamento = input.nextLine();
-					if (tipoAbbonamento.equals("1")) {
-						Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
-								tesseraSelezionata, emettitore1);
-						ad.save(abb1);
-					} else if (tipoAbbonamento.equals("2")) {
-						Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE, tesseraSelezionata,
-								emettitore1);
-						ad.save(abb2);
-					} else {
-						log.info("Selezione numero errata");
+					switch (Integer.parseInt(azione3)) {
+					case 0:
+						log.info("Hai finito");
+						break amministratore;
+					case 1:
+						// String partenza, String capolinea, Double t_medio
+						log.info("Nuova tratta: Inserisci il punto di partenza del mezzo");
+						String partenza = input.nextLine();
+						log.info("Inserisci il suo capolinea");
+						String capolinea = input.nextLine();
+						log.info("Inserisci il tempo di percorrenza");
+						String tMedio = input.nextLine();
+						Tratta nuovaTratta = new Tratta(partenza, capolinea, Double.parseDouble(tMedio));
+						trd.saveTratta(nuovaTratta);
+						break;
+
 					}
 					break;
 				}
-			}
+				break;
+			default:
+				log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
+				continue utilizzatore;
+	
 			// input.close();
 //			em.close();
 //			emf.close();
 		}
 
+		}
+		
 	}
 }
+

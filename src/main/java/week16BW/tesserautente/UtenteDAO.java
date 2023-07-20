@@ -21,4 +21,14 @@ public class UtenteDAO {
 		t.commit();
 		log.info("Utente salvato!");
 	}
+
+	public Utente findById(long codice_id) {
+		Utente trova = em.find(Utente.class, codice_id);
+		if (trova != null) {
+			return trova;
+		} else {
+			log.info("Utente non trovato");
+		}
+		return trova;
+	}
 }
