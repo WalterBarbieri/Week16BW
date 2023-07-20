@@ -407,6 +407,72 @@ public class Main {
 						log.info("Hai finito");
 						break amministratore;
 					case 1:
+						// Numero biglietti obliterati
+						biglietto: while (true) {
+							log.info(
+									"Inserisci il tipo di operazione: \n 1 n. biglietti vidiminati in un arco temporale\n 2 n. biglietti vidiminati in un arco temporale su un determinato mezzo \n "
+											+ "3 n. biglietti emessi da emettitore \n 4 n. biglietti emessi da emettitore in un arco temporale \n 0 per finire");
+							String operazione = input.nextLine();
+							if (Integer.parseInt(operazione) < 0 || Integer.parseInt(operazione) > 4) {
+								log.info("Hai inserito un numero non valido.");
+							}
+							switch (Integer.parseInt(operazione)) {
+							case 0:
+								log.info("Hai finito");
+								break biglietto;
+							case 1:
+								log.info("Scegli la data di inizio");
+								String inizio = input.nextLine();
+								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+								LocalDate dataInizio = LocalDate.parse(inizio, formatter);
+								log.info("Scegli la data di fine");
+								String fine = input.nextLine();
+								LocalDate dataFine = LocalDate.parse(fine, formatter);
+								Long numeroB = bd.numeroBigliettiVimidatiInArcoTemporale(dataInizio, dataFine);
+								log.info("Biglietti emmessi nell'arco temporale " + Long.toString(numeroB));
+								break;
+							case 2:
+								log.info("Scegli la data di inizio");
+								String inizio1 = input.nextLine();
+								DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+								LocalDate dataInizio1 = LocalDate.parse(inizio1, formatter1);
+								log.info("Scegli la data di fine");
+								String fine1 = input.nextLine();
+								LocalDate dataFine1 = LocalDate.parse(fine1, formatter1);
+								log.info("\nInsierisci il codice identificativo del mezzo");
+								String mezzo = input.nextLine();
+								Long numeroBigliettiPerTempoEPerMezzo = bd
+										.numeroBigliettiVimidatiPerMezzoInArcoTemporale(
+										dataInizio1, dataFine1, Integer.parseInt(mezzo));
+								log.info("Biglietti emmessi nell'arco temporale "
+										+ Long.toString(numeroBigliettiPerTempoEPerMezzo));
+								break;
+							case 3:
+								log.info("Scegli l'emettitore");
+								String emettitore = input.nextLine();
+								int contaBigliettiPerEmettitore = bd
+										.trovaBigliettiPerEmettitore(Long.parseLong(emettitore)).size();
+								log.info("Numero tatale di biglietti emessi: "
+										+ Integer.toString(contaBigliettiPerEmettitore));
+								break;
+							case 4:
+								log.info("Scegli la data di inizio");
+								String inizio2 = input.nextLine();
+								DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+								LocalDate dataInizio2 = LocalDate.parse(inizio2, formatter2);
+								log.info("Scegli la data di fine");
+								String fine2 = input.nextLine();
+								LocalDate dataFine2 = LocalDate.parse(fine2, formatter2);
+								log.info("\nInsierisci il codice identificativo dell'emettitore");
+								String emettitoreId = input.nextLine();
+								Long numeroBigliettiPerTempoEPerEmettitore = bd.findBigliettiByTempoAndEmettitore(
+										Long.parseLong(emettitoreId), dataInizio2, dataFine2);
+								log.info("Biglietti emmessi nell'arco temporale dall'emettitore scelto: "
+										+ Long.toString(numeroBigliettiPerTempoEPerEmettitore));
+								break;
+							}
+						}
+					case 2:
 						// String partenza, String capolinea, Double t_medio
 						log.info("Nuova tratta: Inserisci il punto di partenza del mezzo");
 						String partenza = input.nextLine();
@@ -417,7 +483,36 @@ public class Main {
 						Tratta nuovaTratta = new Tratta(partenza, capolinea, Double.parseDouble(tMedio));
 						trd.saveTratta(nuovaTratta);
 						break;
-
+					case 3:
+						// Inserimento mezzo
+						log.info("Nuovo mezzo! Inserisci il tipo di mezzo, 1 Autobus, 2 Tram");
+						String mezzoScelto = input.nextLine();
+						if (mezzoScelto.equals("1")) {
+							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+							String statoMezzoScelto = input.nextLine();
+							if (statoMezzoScelto.equals("1")) {
+								Autobus nuovoAutobus = new Autobus(Stato.ATTIVO);
+								md.saveMezzo(nuovoAutobus);
+							} else if (statoMezzoScelto.equals("2")) {
+								Autobus nuovoAutobus = new Autobus(Stato.MANUTENZIONE);
+								md.saveMezzo(nuovoAutobus);
+							} else {
+								log.info("Il numero inserito non è valido");
+							}
+						} else if (mezzoScelto.equals("2")) {
+							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+							String statoMezzoScelto2 = input.nextLine();
+							if (statoMezzoScelto2.equals("1")) {
+								Tram nuovoAutobus = new Tram(Stato.ATTIVO);
+								md.saveMezzo(nuovoAutobus);
+							} else if (statoMezzoScelto2.equals("2")) {
+								Tram nuovoAutobus = new Tram(Stato.MANUTENZIONE);
+								md.saveMezzo(nuovoAutobus);
+							} else {
+								log.info("Il numero inserito non è valido");
+							}
+						}
+						break;
 					}
 					break;
 				}
