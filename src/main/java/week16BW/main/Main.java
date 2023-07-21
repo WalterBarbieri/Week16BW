@@ -1,34 +1,18 @@
 package week16BW.main;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Scanner;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
-import week16BW.enu.Tipoabbonamento;
-import week16BW.manutenzione.Manutenzione;
-import week16BW.mezzi.Autobus;
-import week16BW.mezzi.Mezzi;
+import week16BW.manutenzione.ManutenzioneDAO;
 import week16BW.mezzi.MezziDao;
-import week16BW.mezzi.Stato;
-import week16BW.mezzi.Tram;
-import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
-import week16BW.tesserautente.Utente;
 import week16BW.tesserautente.UtenteDAO;
-import week16BW.titoloviaggio.Abbonamento;
 import week16BW.titoloviaggio.AbbonamentoDAO;
-import week16BW.titoloviaggio.Biglietto;
 import week16BW.titoloviaggio.BigliettoDAO;
-import week16BW.tratta.Tratta;
 import week16BW.tratta.TrattaDao;
 import week16BW.utils.JpaUtil;
 
@@ -45,6 +29,7 @@ public class Main {
 		AbbonamentoDAO ad = new AbbonamentoDAO(em);
 		MezziDao md = new MezziDao(em);
 		TrattaDao trd = new TrattaDao(em);
+		ManutenzioneDAO ma = new ManutenzioneDAO(em);
 
 		// CREAZIONE RANDOM ISTANZE Personaggi
 		for (int i = 0; i < 100; i++) {
@@ -116,7 +101,9 @@ public class Main {
 //
 //		trd.saveTratta(route1);
 //		trd.saveTratta(route2);
-//
+//		// CREAZIONE RANDOM ISTANZE MEZZI
+		md.saveMezzo(20);
+
 //		// CREAZIONE MANUALE ISTANZE MEZZI
 //
 //		Autobus bus1 = new Autobus(Stato.ATTIVO);
@@ -135,7 +122,7 @@ public class Main {
 //			md.mezzoCorsa(11);
 //		}
 
-		// CREAZIONE MANUALE ISTANZA STORICO TRATTE
+		// CREAZIONE MANUALE ISTANZA STORICO TRATTE E MANUTENZIONE
 //		md.mezzoCorsa(25.0, 10);
 //		md.mezzoManutenzione(11, "si è sfasciato il database");
 
@@ -154,6 +141,14 @@ public class Main {
 //		md.selectTempoEffettivoCodiceMezzo(79);
 //		// 3) BY TRATTA
 //		md.selectTempoEffettivoCodiceTratta(78);
+
+//		// RICERCA MANUTENZIONI
+//		// 1) TUTTE
+//		ma.selectAllNumeroManutenzioni();
+//		// 2) BY MEZZO
+//		ma.selectManutenzioniByMezzo(11);
+//		// 3) BY TRATTA
+//		ma.selectManutenzioniByTratta(9);
 //		Long nbiglietti = bd.findBigliettiByEmettitore(1);
 //		log.info("Numero biglietti emessi:" + nbiglietti.toString());
 //
@@ -810,4 +805,3 @@ public class Main {
 
 	}
 }
-
