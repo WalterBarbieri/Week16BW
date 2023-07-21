@@ -47,9 +47,10 @@ public class BigliettoDAO {
 	public void save(int number) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
-		Emettitore emettitore = ed.rndEmettitore();
+
 		try {
 			for (int i = 0; i < number; i++) {
+				Emettitore emettitore = ed.rndEmettitore();
 				Biglietto biglietto = new Biglietto();
 				biglietto.setActive(true);
 				biglietto.setEmettitore(emettitore);

@@ -51,29 +51,29 @@ public class Main {
 		// ****************************CREAZIONE RANDOM ISTANZE FUNZIONANTE PER PROVE DI
 		// SVILUPPO**************************
 		// CREAZIONE RANDOM ISTANZE Personaggi
-		for (int i = 0; i < 100; i++) {
-			ud.save(ud.creaUtente(i));
-		}
-		// CREAZIONE RANDOM ISTANZE EMETTITORE
-		ed.save(15);
-
-		// CREAZIONE RANDOM ISTANZE TESSERE
-		td.save(5);
-
-		// CREAZIONE RANDOM ISTANZE BIGLIETTO
-		bd.save(60);
-
-		// CREAZIONE RANDOM ISTANZE ABBONAMENTO
-		ad.save(40);
-
-		// CREAZIONE RANDOM ISTANZE TRATTA
-		trd.saveTratta(10);
-
-		// CREAZIONE RANDOM ISTANZE MEZZI
-		md.saveMezzo(20);
-
-		// CREAZIONE RANDOM ISTANZE STORICO TRATTE E MANUTENZIONE PER OGNI MEZZO
-		md.mezzoCorsa(30);
+//		for (int i = 0; i < 100; i++) {
+//			ud.save(ud.creaUtente(i));
+//		}
+//		// CREAZIONE RANDOM ISTANZE EMETTITORE
+//		ed.save(15);
+//
+//		// CREAZIONE RANDOM ISTANZE TESSERE
+//		td.save(5);
+//
+//		// CREAZIONE RANDOM ISTANZE BIGLIETTO
+//		bd.save(60);
+//
+//		// CREAZIONE RANDOM ISTANZE ABBONAMENTO
+//		ad.save(40);
+//
+//		// CREAZIONE RANDOM ISTANZE TRATTA
+//		trd.saveTratta(10);
+//
+//		// CREAZIONE RANDOM ISTANZE MEZZI
+//		md.saveMezzo(20);
+//
+//		// CREAZIONE RANDOM ISTANZE STORICO TRATTE E MANUTENZIONE PER OGNI MEZZO
+//		md.mezzoCorsa(30);
 
 		// ****************************CREAZIONE MANUALE ISTANZE FUNZIONANTE PER PROVE
 		// DI SVILUPPO**************************
@@ -442,7 +442,8 @@ public class Main {
 												log.info("Inserisci il cognome dell'utente");
 												String cognome = input.nextLine();
 												if (cognome.matches(letters)) {
-													log.info("Inserisci la data di nascita dell'utente");
+													log.info(
+															"Inserisci la data di nascita dell'utente: Formato yyyy-mm-dd");
 													String dateString = input.nextLine();
 													DateTimeFormatter formatter = DateTimeFormatter
 															.ofPattern("yyyy-MM-dd");

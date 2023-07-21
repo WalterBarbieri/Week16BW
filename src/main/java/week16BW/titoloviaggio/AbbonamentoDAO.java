@@ -51,11 +51,12 @@ public class AbbonamentoDAO {
 	public void save(int number) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
-		Emettitore emettitore = ed.rndEmettitore();
-		Tessera tessera = td.rndTessera();
+
 		Random rnd = new Random();
 		try {
 			for (int i = 0; i < number; i++) {
+				Emettitore emettitore = ed.rndEmettitore();
+				Tessera tessera = td.rndTessera();
 				Abbonamento abbonamento = new Abbonamento();
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				long meseEmissioneLong = Math.round(Math.random() * 6 + 1);
