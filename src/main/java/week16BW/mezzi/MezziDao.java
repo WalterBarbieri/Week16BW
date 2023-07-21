@@ -83,7 +83,7 @@ public class MezziDao {
 		t.begin();
 		Random rnd = new Random();
 		Mezzi mezzo = getMezzoByCodice(codice_mezzo);
-		if (mezzo.getN_tratte() % 10 == 0 && mezzo.getN_tratte() != 0) {
+		if (mezzo.getN_totale() % 10 == 0 && mezzo.getN_totale() != 0) {
 			try {
 				Manutenzione manutenzione = new Manutenzione();
 				manutenzione.setMezzo(mezzo);
@@ -100,7 +100,8 @@ public class MezziDao {
 				}
 				mezzo.getStorico_manutenzione().add(manutenzione);
 				mezzo.setN_manutenzioni(mezzo.getN_manutenzioni() + 1);
-				mezzo.setN_tratte(mezzo.getN_tratte() + 1);
+				mezzo.setN_totale(mezzo.getN_totale() + 1);
+				mezzo.setN_tratte(mezzo.getN_totale(), mezzo.getN_manutenzioni());
 				em.merge(mezzo);
 				log.info("Storico manutenzione relativo a " + manutenzione.getMezzo().getCodice_mezzo()
 						+ " inserito con successo");
@@ -109,33 +110,34 @@ public class MezziDao {
 				log.info("Errore nell'inserimento della manutenzione");
 			}
 		} else {
-		try {
-			StoricoTratte storicoTratta = new StoricoTratte();
+			try {
+				StoricoTratte storicoTratta = new StoricoTratte();
 
-			Double tMedio = mezzo.getTratta().getT_medio();
-			Double intervallo = ((rnd.nextDouble() * 10) - 5);
-			Double intervalloApp = Math.round(intervallo * 100.0) / 100.0;
-			Double tEffettivo = tMedio + intervalloApp;
-			storicoTratta.setT_effettivo(tEffettivo);
+				Double tMedio = mezzo.getTratta().getT_medio();
+				Double intervallo = ((rnd.nextDouble() * 10) - 5);
+				Double intervalloApp = Math.round(intervallo * 100.0) / 100.0;
+				Double tEffettivo = tMedio + intervalloApp;
+				storicoTratta.setT_effettivo(tEffettivo);
 
-			storicoTratta.setMezzo(mezzo);
+				storicoTratta.setMezzo(mezzo);
 
-			em.persist(storicoTratta);
+				em.persist(storicoTratta);
 
-			if (mezzo.getStorico_tratte() == null) {
-				mezzo.setStorico_tratte(new ArrayList<>());
+				if (mezzo.getStorico_tratte() == null) {
+					mezzo.setStorico_tratte(new ArrayList<>());
+				}
+				mezzo.getStorico_tratte().add(storicoTratta);
+				mezzo.setN_totale(mezzo.getN_totale() + 1);
+				mezzo.setN_tratte(mezzo.getN_totale(), mezzo.getN_manutenzioni());
+				em.merge(mezzo);
+
+				log.info("Storico Tratta relativo al mezzo " + mezzo.getCodice_mezzo() + " inserito con successo");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("Errore durante l'inserimento dello Storico Tratta");
 			}
-			mezzo.getStorico_tratte().add(storicoTratta);
-			mezzo.setN_tratte(mezzo.getN_tratte() + 1);
-			em.merge(mezzo);
-
-			log.info("Storico Tratta relativo al mezzo " + mezzo.getCodice_mezzo() + " inserito con successo");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("Errore durante l'inserimento dello Storico Tratta");
 		}
-	}
 		t.commit();
 	}
 
@@ -160,7 +162,8 @@ public class MezziDao {
 				mezzo.setStorico_tratte(new ArrayList<>());
 			}
 			mezzo.getStorico_tratte().add(storicoTratta);
-			mezzo.setN_tratte(mezzo.getN_tratte() + 1);
+			mezzo.setN_totale(mezzo.getN_totale() + 1);
+			mezzo.setN_tratte(mezzo.getN_totale(), mezzo.getN_manutenzioni());
 			em.merge(mezzo);
 
 			log.info("Storico Tratta relativo al mezzo " + mezzo.getCodice_mezzo() + " inserito con successo");
@@ -170,6 +173,43 @@ public class MezziDao {
 			log.info("Errore durante l'inserimento dello Storico Tratta");
 		}
 
+		t.commit();
+	}
+	// **************METODO PER CREARE E SALVARE UNA MANUTENZIONE TRAMITE CODICE
+	// MEZZO***********************
+
+	public void mezzoManutenzione(long codice_mezzo, String descrizione) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		Mezzi mezzo = getMezzoByCodice(codice_mezzo);
+		Random rnd = new Random();
+		try {
+			Manutenzione manutenzione = new Manutenzione();
+			manutenzione.setMezzo(mezzo);
+			manutenzione.setTipo_manutenzione(Tipo_manutenzione.STRAORDINARIA);
+			manutenzione.setDescrizione(descrizione);
+			LocalDate ora = LocalDate.now();
+			manutenzione.setInizio_manutenzione(ora);
+			int giorniManutenzione = rnd.nextInt(7) + 1;
+			manutenzione.setDurata_in_giorni(giorniManutenzione);
+			LocalDate fine_manutenzione = ora.plusDays(giorniManutenzione);
+			manutenzione.setFine_manutenzione(fine_manutenzione);
+			em.persist(manutenzione);
+			if (mezzo.getStorico_manutenzione() == null) {
+				mezzo.setStorico_manutenzione(new ArrayList<>());
+			}
+			mezzo.getStorico_manutenzione().add(manutenzione);
+			mezzo.setN_manutenzioni(mezzo.getN_manutenzioni() + 1);
+			mezzo.setN_totale(mezzo.getN_totale() + 1);
+			mezzo.setN_tratte(mezzo.getN_totale(), mezzo.getN_manutenzioni());
+			em.merge(mezzo);
+			log.info("Storico manutenzione relativo a " + manutenzione.getMezzo().getCodice_mezzo()
+					+ " inserito con successo");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore durante l'inserimento della Manutenzione");
+		}
 		t.commit();
 	}
 
