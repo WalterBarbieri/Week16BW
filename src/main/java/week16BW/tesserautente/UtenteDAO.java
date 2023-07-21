@@ -2,9 +2,12 @@ package week16BW.tesserautente;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +62,21 @@ public class UtenteDAO {
 		String dataNascitaStringa = annoNascita + "-" + meseNascita + "-" + giornoNascita;
 		LocalDate dataNascita = LocalDate.parse(dataNascitaStringa, formatter);
 		return new Utente(nome[0], nome[indiceCognome], dataNascita);
-		
+
+	}
+
+	public Utente rndUtente() {
+		Random rnd = new Random();
+		try {
+			TypedQuery<Utente> getAllQuery = em.createQuery("SELECT a FROM Utente a", Utente.class);
+			List<Utente> utenti = getAllQuery.getResultList();
+			Utente rndUtente = utenti.get(Math.abs(rnd.nextInt(utenti.size())));
+			return rndUtente;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore nella ricerca dell'utente");
+			return null;
+		}
 
 	}
 }

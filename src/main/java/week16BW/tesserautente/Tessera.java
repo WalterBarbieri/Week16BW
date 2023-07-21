@@ -37,7 +37,7 @@ public class Tessera {
 //	private String cognome;
 	private LocalDate emissione_tessera;
 	private LocalDate scadenza_tessera;
-	
+
 	@OneToOne
 	private Utente utente;
 
@@ -47,6 +47,11 @@ public class Tessera {
 
 	@OneToMany(mappedBy = "tessera")
 	private Set<Abbonamento> abbonamento = new HashSet<>();
+
+	public Tessera(LocalDate emissione_tessera) {
+		this.emissione_tessera = emissione_tessera;
+		this.scadenza_tessera = this.emissione_tessera.plusDays(365);
+	}
 
 	public Tessera(LocalDate emissione_tessera, Utente utente, Emettitore emettitore) {
 		this.utente = utente;
@@ -64,9 +69,7 @@ public class Tessera {
 //				+ "]" + "\n";
 //	}
 	public String toString() {
-		return "Tessera [ Codice Tessera=" + codice_tessera
-				+ ",\n emissione della Tessera=" + emissione_tessera + ", \n scadenza della Tessera=" + scadenza_tessera
-				+ "]" + "\n";
+		return "Tessera [ Codice Tessera=" + codice_tessera + ",\n emissione della Tessera=" + emissione_tessera
+				+ ", \n scadenza della Tessera=" + scadenza_tessera + "]" + "\n";
 	}
 }
-
