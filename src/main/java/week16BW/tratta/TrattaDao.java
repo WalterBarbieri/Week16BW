@@ -1,7 +1,10 @@
 package week16BW.tratta;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +42,19 @@ public class TrattaDao {
 			log.info("Tratta non trovata");
 		}
 		return trova;
+	}
+
+	public List<Tratta> findByPartenza(String partenza) {
+		TypedQuery<Tratta> query = em.createQuery("SELECT a FROM Tratta a WHERE partenza = :partenza", Tratta.class);
+		query.setParameter("partenza", partenza);
+		return query.getResultList();
+	}
+
+	public List<Tratta> findByCapolinea(String capolinea) {
+		TypedQuery<Tratta> query = em.createQuery("SELECT a FROM Tratta a WHERE capolinea = :capolinea", Tratta.class);
+		query.setParameter("capolinea", capolinea);
+		return query.getResultList();
+
 	}
 
 }

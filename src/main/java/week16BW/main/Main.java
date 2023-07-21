@@ -46,7 +46,7 @@ public class Main {
 		MezziDao md = new MezziDao(em);
 		TrattaDao trd = new TrattaDao(em);
 
-//		// Creazione utente, emettitore
+		// Creazione utente, emettitore
 //		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 //		Utente ut2 = new Utente("C", "H", LocalDate.of(1988, 07, 06));
 //		Utente ut3 = new Utente("D", "I", LocalDate.of(2008, 10, 15));
@@ -121,8 +121,8 @@ public class Main {
 //		tram1.setTratta(route2);
 //		md.saveMezzo(bus1);
 //		md.saveMezzo(tram1);
-//
-//		// CREAZIONE RANDOM ISTANZE STORICO TRATTE E MANUTENZIONE
+
+		// CREAZIONE RANDOM ISTANZE STORICO TRATTE E MANUTENZIONE
 //		for (int i = 0; i < 20; i++) {
 //			md.mezzoCorsa(10);
 //		}
@@ -131,8 +131,8 @@ public class Main {
 //		}
 
 		// CREAZIONE MANUALE ISTANZA STORICO TRATTE
-		md.mezzoCorsa(25.0, 10);
-		md.mezzoManutenzione(11, "si è sfasciato il database");
+//		md.mezzoCorsa(25.0, 10);
+//		md.mezzoManutenzione(11, "si è sfasciato il database");
 
 		// RICERCA NUMERO TRATTE:
 		// 1) TUTTE
@@ -209,7 +209,7 @@ public class Main {
 
 //		ad.controlloAbbonamento(3);
 
-		String letters = "^[a-zA-Z]*$";
+		String letters = "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$";
 		String doubleValidator = "\"^[0-9]*\\\\.([0-9]+)+$\"";
 		Scanner input = new Scanner(System.in);
 		utilizzatore: while (true) {
@@ -380,11 +380,11 @@ public class Main {
 						ufficioBiglietteria: while (true) {
 							try {
 								log.info(
-										"Ufficio Biglietteria: Che azione vuoi eseguire:\n 1 aggiungi un utente,\n 2 crea una tessera,\n 3 rinnovare la tessera,\n 0 per finire");
+										"Ufficio Biglietteria: Che azione vuoi eseguire:\n 1 aggiungi un utente,\n 2 crea una tessera,\n 3 rinnovare la tessera,\n 4 informazioni tratta,\n 0 per finire");
 								String azione2 = input.nextLine();
-								if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 3) {
+								if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 4) {
 									log.info("Hai inserito un numero non valido.");
-								} else if (Integer.parseInt(azione2) >= 0 || Integer.parseInt(azione2) <= 3) {
+								} else if (Integer.parseInt(azione2) >= 0 || Integer.parseInt(azione2) <= 4) {
 									switch (Integer.parseInt(azione2)) {
 									case 0:
 										log.info("Hai finito");
@@ -442,6 +442,31 @@ public class Main {
 												"Errore durante il rinnovamento tessera, controlla il tuo codice tessera");
 									}
 									break;
+								case 4:
+									try {
+										log.info(
+												"Informazioni tratta: vuoi sapere quali mezzi ti portano alla tua destinazione?");
+										log.info("Inserisci la tua destinazione");
+										String destinazione = input.nextLine();
+										if (destinazione.matches(letters)) {
+											List<Tratta> destinazioneCercata = trd.findByCapolinea(destinazione);
+											for (Tratta elementi : destinazioneCercata) {
+												List<Mezzi> listaMezziTrovati = elementi.getMezzi();
+												for (Mezzi mezzo : listaMezziTrovati) {
+													log.info("Mezzi che portano a " + destinazione + " sono i numeri: "
+															+ mezzo.getCodice_mezzo() + "\n");
+												}
+											}
+										} else {
+											log.info(
+													"Errore, inserisci la tua destinazione senza numeri o caratteri speciali");
+										}
+
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante la ricerca del capolinea");
+									}
+									break;
 								default:
 									log.info("Hai inserito un numero non elencato");
 								}
@@ -479,7 +504,7 @@ public class Main {
 										Mezzi findMezzo = md.getMezzoByCodice(Long.parseLong(mezzoControllato1));
 										List<Manutenzione> manutenzioneMezzo = findMezzo.getStorico_manutenzione();
 										for (Manutenzione elementi : manutenzioneMezzo) {
-											System.out.println("Il mezzo è stato in manutenzione per: "
+											log.info("Il mezzo è stato in manutenzione per: "
 													+ elementi.getDurata_in_giorni()
 													+ " giorni, è tornato attivo il giorno: "
 													+ elementi.getFine_manutenzione() + "\n Codice della manutenzione: "
