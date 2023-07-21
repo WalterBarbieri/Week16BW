@@ -14,7 +14,6 @@ import javax.persistence.NamedQuery;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import week16BW.mezzi.Mezzi;
 //import week16BW.mezzi.Mezzi;
 
@@ -22,10 +21,10 @@ import week16BW.mezzi.Mezzi;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 @NamedQuery(name = "selectAllManutenzioni", query = "SELECT a FROM Manutenzione a")
-@NamedQuery(name = "selectManutenzioniByMezzo", query = "SELECT a FROM Manutenzione a WHERE mezzo.codice_mezzo = :codice_mezzo")
-@NamedQuery(name = "selectManutenzioniByTratta", query = "SELECT a FROM Manutenzione a WHERE mezzo.codice_mezzo = :codice_mezzo")
+@NamedQuery(name = "selectManutenzioniByMezzo", query = "SELECT a FROM Mezzi a WHERE codice_mezzo = :codice_mezzo")
+@NamedQuery(name = "selectManutenzioniByTratta", query = "SELECT a FROM Mezzi a WHERE tratta.codice_tratta = :codice_tratta")
 public class Manutenzione {
 	// Definizione attributi
 	@Id
@@ -47,4 +46,13 @@ public class Manutenzione {
 		this.tipo_manutenzione = tipo_manutenzione;
 		this.inizio_manutenzione = inizio_manutenzione;
 	}
+
+	@Override
+	public String toString() {
+		return "Manutenzione [Codice Manutenzione = " + codice_manutenzione + ", Tipo Manutenzione = "
+				+ tipo_manutenzione + ", Descrizione = " + descrizione + ", Inizio Manutenzione = "
+				+ inizio_manutenzione + ", Fine Manutenzione=" + fine_manutenzione + ", Durata In Giorni="
+				+ durata_in_giorni + "]";
+	}
+
 }

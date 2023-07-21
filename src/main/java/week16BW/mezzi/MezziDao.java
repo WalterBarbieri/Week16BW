@@ -59,6 +59,33 @@ public class MezziDao {
 
 	}
 
+	public void saveMezzo(int number) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		Random rnd = new Random();
+		try {
+			for (int i = 0; i < number; i++) {
+				int randomInt = rnd.nextInt(100) + 1;
+				if (randomInt % 2 == 0) {
+					Autobus bus = new Autobus();
+					bus.setStato(Stato.ATTIVO);
+					em.persist(bus);
+					log.info("Autobus creato con successo");
+				} else {
+					Tram tram = new Tram();
+					tram.setStato(Stato.ATTIVO);
+					em.persist(tram);
+					log.info("Tram creato con successo");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore durante la creazione del mezzo");
+		}
+		t.commit();
+
+	}
+
 	// **************METODO PER RICERCARE MEZZO TRAMITE CODICE
 	// MEZZO***********************
 	public Mezzi getMezzoByCodice(long codice_mezzo) {
