@@ -43,6 +43,11 @@ public class Main {
 		MezziDao md = new MezziDao(em);
 		TrattaDao trd = new TrattaDao(em);
 
+		// CREAZIONE RANDOM ISTANZE Personaggi
+		for (int i = 0; i < 100; i++) {
+			ud.save(ud.creaUtente(i));
+		}
+
 		// Creazione utente, emettitore
 //		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 //		Utente ut2 = new Utente("C", "H", LocalDate.of(1988, 07, 06));
