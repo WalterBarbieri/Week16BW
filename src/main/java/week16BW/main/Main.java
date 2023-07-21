@@ -1,18 +1,35 @@
 package week16BW.main;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Scanner;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
+import week16BW.enu.Tipoabbonamento;
+import week16BW.manutenzione.Manutenzione;
 import week16BW.manutenzione.ManutenzioneDAO;
+import week16BW.mezzi.Autobus;
+import week16BW.mezzi.Mezzi;
 import week16BW.mezzi.MezziDao;
+import week16BW.mezzi.Stato;
+import week16BW.mezzi.Tram;
+import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
+import week16BW.tesserautente.Utente;
 import week16BW.tesserautente.UtenteDAO;
+import week16BW.titoloviaggio.Abbonamento;
 import week16BW.titoloviaggio.AbbonamentoDAO;
+import week16BW.titoloviaggio.Biglietto;
 import week16BW.titoloviaggio.BigliettoDAO;
+import week16BW.tratta.Tratta;
 import week16BW.tratta.TrattaDao;
 import week16BW.utils.JpaUtil;
 
@@ -32,10 +49,11 @@ public class Main {
 		ManutenzioneDAO ma = new ManutenzioneDAO(em);
 
 		// CREAZIONE RANDOM ISTANZE Personaggi
-		for (int i = 0; i < 100; i++) {
-			ud.save(ud.creaUtente(i));
-		}
+//		for (int i = 0; i < 100; i++) {
+//			ud.save(ud.creaUtente(i));
+//		}
 
+		ed.save(15);
 		// Creazione utente, emettitore
 //		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 //		Utente ut2 = new Utente("C", "H", LocalDate.of(1988, 07, 06));
@@ -102,7 +120,7 @@ public class Main {
 //		trd.saveTratta(route1);
 //		trd.saveTratta(route2);
 //		// CREAZIONE RANDOM ISTANZE MEZZI
-		md.saveMezzo(20);
+//		md.saveMezzo(20);
 
 //		// CREAZIONE MANUALE ISTANZE MEZZI
 //

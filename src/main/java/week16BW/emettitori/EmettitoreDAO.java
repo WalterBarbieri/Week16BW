@@ -1,5 +1,7 @@
 package week16BW.emettitori;
 
+import java.util.Random;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -21,6 +23,35 @@ public class EmettitoreDAO {
 		em.persist(e);
 		t.commit();
 		log.info("Emettitore salvato!");
+	}
+
+	public void save(int numero) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		Random rnd = new Random();
+		try {
+			for (int i = 0; i < numero; i++) {
+				int randomN = rnd.nextInt(100) + 1;
+				if (randomN % 2 == 0) {
+					Distributore distributore = new Distributore();
+					int randomN1 = rnd.nextInt(100) + 1;
+					if (randomN1 % 2 == 0) {
+						distributore.setAttivo(true);
+					} else {
+						distributore.setAttivo(false);
+					}
+					em.persist(distributore);
+				} else {
+					RivenditoreAutorizzato rivenditore = new RivenditoreAutorizzato();
+					em.persist(rivenditore);
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore nella creazione degli emettitori");
+		}
+		t.commit();
 	}
 
 	public Emettitore findByCodiceEmettitore(long codice_emettitore) {
