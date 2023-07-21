@@ -205,6 +205,8 @@ public class Main {
 
 //		ad.controlloAbbonamento(3);
 
+		String letters = "^[a-zA-Z]*$";
+		String doubleValidator = "\"^[0-9]*\\\\.([0-9]+)+$\"";
 		Scanner input = new Scanner(System.in);
 		utilizzatore: while (true) {
 			try {
@@ -309,6 +311,8 @@ public class Main {
 													} else {
 														log.info("Selezione numero errata");
 													}
+												} else {
+													log.info("Inserimento emettitore errato");
 												}
 											} else {
 												log.info("Tessera non trovata");
@@ -385,8 +389,10 @@ public class Main {
 										try {
 											log.info("Creare l'utente: Inserisci il nome dell'utente");
 											String nome = input.nextLine();
+											if (nome.matches(letters)) {
 											log.info("Inserisci il cognome dell'utente");
 											String cognome = input.nextLine();
+											if (cognome.matches(letters)) {
 											log.info("Inserisci la data di nascita dell'utente");
 											String dateString = input.nextLine();
 											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -394,6 +400,12 @@ public class Main {
 											Utente ut10 = new Utente(nome, cognome, dataNascita);
 											ud.save(ut10);
 											log.info(ut10.toString());
+										} else {
+											log.info("Inserisci un cognome senza numeri o caratteri speciali");
+											}
+										} else {
+											log.info("Inserisci un nome senza numeri o caratteri speciali");
+										}
 										} catch (Exception e) {
 											e.printStackTrace();
 											log.info("Errore durante l'inserimento per creare l'utente");
@@ -634,13 +646,25 @@ public class Main {
 									try {
 										log.info("Nuova tratta: Inserisci il punto di partenza del mezzo");
 										String partenza = input.nextLine();
+										if (partenza.matches(letters)) {
 										log.info("Inserisci il suo capolinea");
 										String capolinea = input.nextLine();
+										 if (capolinea.matches(letters)) {
 										log.info("Inserisci il tempo di percorrenza");
 										String tMedio = input.nextLine();
+										if (tMedio.matches(doubleValidator)) {
 										Tratta nuovaTratta = new Tratta(partenza, capolinea,
 												Double.parseDouble(tMedio));
 										trd.saveTratta(nuovaTratta);
+									} else {
+										log.info("Inserisci un tempo medio valido");
+									}
+									} else {
+										log.info("Inserisci un capolinea valido");
+									}
+										} else {
+											log.info("Inserisci una partenza valida");
+										}							
 									} catch (Exception e) {
 										e.printStackTrace();
 										log.info("Errore durante l'inserimento per l'inserimento della nuova tratta");
@@ -677,7 +701,7 @@ public class Main {
 												log.info("Il numero inserito non è valido");
 											}
 										} else {
-											log.info("Inserimento errato durante la carezione del mezzo!");
+											log.info("Inserimento errato durante la creazione del mezzo!");
 										}
 									} catch (Exception e) {
 										e.printStackTrace();
