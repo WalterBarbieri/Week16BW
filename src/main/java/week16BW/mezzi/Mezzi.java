@@ -42,6 +42,7 @@ public abstract class Mezzi {
 	private long codice_mezzo;
 	private int n_tratte;
 	private int n_manutenzioni;
+	private int n_totale;
 	private int capienza;
 	@Enumerated(EnumType.STRING)
 	private Stato stato;
@@ -62,11 +63,15 @@ public abstract class Mezzi {
 	private List<Manutenzione> storico_manutenzione;
 
 	public Mezzi(Stato stato) {
-		this.n_tratte = 0;
+		this.n_totale = 0;
 		this.n_manutenzioni = 0;
+		this.setN_tratte(this.n_manutenzioni, this.n_totale);
 		this.stato = stato;
 	}
 
+	public void setN_tratte(int n_totale, int n_manutenzione) {
+		this.n_tratte = n_totale - n_manutenzione;
+	}
 
 	@Override
 	public String toString() {

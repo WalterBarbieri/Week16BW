@@ -46,7 +46,7 @@ public class Main {
 		MezziDao md = new MezziDao(em);
 		TrattaDao trd = new TrattaDao(em);
 
-		// Creazione utente, emettitore
+//		// Creazione utente, emettitore
 //		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 //		Utente ut2 = new Utente("C", "H", LocalDate.of(1988, 07, 06));
 //		Utente ut3 = new Utente("D", "I", LocalDate.of(2008, 10, 15));
@@ -68,7 +68,7 @@ public class Main {
 //		ed.save(emettitore3);
 //		ed.save(emettitore4);
 //
-////		// Crea tessera e biglietto
+//		// Crea tessera e biglietto
 //		Tessera tess1 = new Tessera(LocalDate.of(2021, 4, 02), ut1, emettitore1);
 //		Tessera tess2 = new Tessera(LocalDate.of(2023, 1, 1), ut2, emettitore2);
 //		Tessera tess3 = new Tessera(LocalDate.of(2022, 5, 12), ut3, emettitore2);
@@ -81,53 +81,58 @@ public class Main {
 //		td.save(tess4);
 //		td.save(tess5);
 //		td.save(tess6);
-////		// Creazione istanze per biglietto
+//		// Creazione istanze per biglietto
 //		Biglietto biglietto1 = new Biglietto(LocalDate.of(2023, 04, 17), emettitore1);
 //		Biglietto biglietto2 = new Biglietto(LocalDate.of(2023, 04, 19), emettitore1);
 //		Biglietto biglietto3 = new Biglietto(LocalDate.of(2022, 04, 20), emettitore1);
 //		Biglietto biglietto4 = new Biglietto(LocalDate.of(2021, 05, 9), emettitore2);
-////		// Salvataggio biglietti a DB
+//		// Salvataggio biglietti a DB
 //		bd.save(biglietto1);
 //		bd.save(biglietto2);
 //		bd.save(biglietto3);
 //		bd.save(biglietto4);
-////
-////// Creo Abbonamento
-////		// Creazione istanze per abbonamento
+//
+//		// Creo Abbonamento
+//		// Creazione istanze per abbonamento
 //		Abbonamento abbonamento1 = new Abbonamento(LocalDate.of(2023, 2, 14), Tipoabbonamento.MENSILE, tess1,
 //				emettitore1);
 //		Abbonamento abbonamento2 = new Abbonamento(LocalDate.of(2023, 4, 27), Tipoabbonamento.SETTIMANALE, tess2,
 //				emettitore2);
 //		Abbonamento abbonamento3 = new Abbonamento(LocalDate.of(2022, 4, 17), Tipoabbonamento.SETTIMANALE, tess3,
 //				emettitore1);
-////		// Salvataggio abbonamenti a DB
+//		// Salvataggio abbonamenti a DB
 //		ad.save(abbonamento1);
 //		ad.save(abbonamento2);
 //		ad.save(abbonamento3);
-////
-////
-////
-////		// CREAZIONE MANUALE ISTANZE TRATTA
+//
+//		// CREAZIONE MANUALE ISTANZE TRATTA
 //		Tratta route1 = new Tratta("Punto A", "Punto B", 20.0);
 //		Tratta route2 = new Tratta("Punto C", "Punto D", 27.0);
-////
+//
 //		trd.saveTratta(route1);
 //		trd.saveTratta(route2);
-////
-////		// CREAZIONE MANUALE ISTANZE MEZZI
-////
+//
+//		// CREAZIONE MANUALE ISTANZE MEZZI
+//
 //		Autobus bus1 = new Autobus(Stato.ATTIVO);
-//		Tram tram1 = new Tram(Stato.MANUTENZIONE);
+//		Tram tram1 = new Tram(Stato.ATTIVO);
 //
 //		bus1.setTratta(route1);
 //		tram1.setTratta(route2);
 //		md.saveMezzo(bus1);
 //		md.saveMezzo(tram1);
 //
-////		// CREAZIONE RANDOM ISTANZE STORICO TRATTE
-//		for (int i = 0; i < 15; i++) {
-//			md.mezzoCorsa(51);
+//		// CREAZIONE RANDOM ISTANZE STORICO TRATTE E MANUTENZIONE
+//		for (int i = 0; i < 20; i++) {
+//			md.mezzoCorsa(10);
 //		}
+//		for (int i = 0; i < 30; i++) {
+//			md.mezzoCorsa(11);
+//		}
+
+		// CREAZIONE MANUALE ISTANZA STORICO TRATTE
+		md.mezzoCorsa(25.0, 10);
+		md.mezzoManutenzione(11, "si è sfasciato il database");
 
 		// RICERCA NUMERO TRATTE:
 		// 1) TUTTE
@@ -166,7 +171,6 @@ public class Main {
 //		// Metodo per la registrazioine della data di attivazione di un abbonamento
 //		ad.dataAttivazioneAbbonamento(12);
 
-
 //		// Tenere traccia del numero di biglietti vidimati in totale in un arco
 //		// temporale per mezzo
 //		System.out.println(
@@ -196,7 +200,7 @@ public class Main {
 //		// Biglietti stampati per emettitore
 //		System.out.println("\nBiglietti per emettitore\n");
 //		bd.trovaBigliettiPerEmettitore(4).forEach(b -> System.out.println(b.toString()));
-		
+
 //		bd.vidimazioneBiglietto1(2, 11);
 //		bd.vidimazioneBiglietto(1);
 //		bd.dataVidimazioneBiglietto(1);

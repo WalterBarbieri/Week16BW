@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,9 @@ import week16BW.mezzi.Mezzi;
 @Setter
 @NoArgsConstructor
 @ToString
+@NamedQuery(name = "selectAllManutenzioni", query = "SELECT a FROM Manutenzione a")
+@NamedQuery(name = "selectManutenzioniByMezzo", query = "SELECT a FROM Manutenzione a WHERE mezzo.codice_mezzo = :codice_mezzo")
+@NamedQuery(name = "selectManutenzioniByTratta", query = "SELECT a FROM Manutenzione a WHERE mezzo.codice_mezzo = :codice_mezzo")
 public class Manutenzione {
 	// Definizione attributi
 	@Id
