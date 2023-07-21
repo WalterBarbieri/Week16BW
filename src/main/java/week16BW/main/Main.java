@@ -207,406 +207,549 @@ public class Main {
 
 		Scanner input = new Scanner(System.in);
 		utilizzatore: while (true) {
-			log.info(
-					"Chi sei:\n 1 utente,\n 2 Ufficio biglietteria,\n 3 amministratore,\n 4 controllore,\n 0 per uscire");
-			String persona = input.nextLine();
-			if (Integer.parseInt(persona) < 0 || Integer.parseInt(persona) > 4) {
-				log.info("Hai inserito un numero non valido.");
-			}
-			switch (Integer.parseInt(persona)) {
-			case 0: 
-				log.info("Hai finito");
-				break utilizzatore;
-			case 1:
-				operazione: while (true) {
-					log.info(
-							"Che azione vuoi eseguire:\n 1 compra un biglietto,\n 2 compra un abbonamento,\n 3 obliterare il biglietto,\n 4 attiva abbonamento,\n 0 per finire");
-					String azione = input.nextLine();
-					if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 4) {
-						log.info("Hai inserito un numero non valido.");
-					}
-					switch (Integer.parseInt(azione)) {
-					case 0:
-						log.info("Hai finito");
-						break operazione;
-					case 1:
-						log.info("Sei da un distributore(1) o da un rivenditore auttorizzato(2)?");
-						String tipoEmettitore = input.nextLine();
-						if (tipoEmettitore.equals("1")) {
-							Emettitore emettitore7 = new Emettitore();
-							ed.save(emettitore7);
-							Biglietto b1 = new Biglietto(LocalDate.now(), emettitore7);
-							// random emettitore nella lista distributori
-							bd.save(b1);
-						} else if (tipoEmettitore.equals("2")) {
-							Emettitore emettitore8 = new Emettitore();
-							ed.save(emettitore8);
-							Biglietto b1 = new Biglietto(LocalDate.now(), emettitore8);
-							bd.save(b1);
-							// random emettitore nella lista distributori
-						} else {
-							log.info("Selezione numero errata");
-						}
-						break;
-					case 2:
-						log.info("Inserisci il tuo numero tessera");
-						String numeroTessera = input.nextLine();
-						Long numeroTessera1 = Long.parseLong(numeroTessera);
-						Tessera tesseraSelezionata = td.findByCodiceTessera(numeroTessera1);
-						log.info("Sei da un distributore(1) o da un rivenditore auttorizzato(2)?");
-						String tipoEmettitore2 = input.nextLine();
-						if (tipoEmettitore2.equals("1")) {
-							Emettitore emettitore7 = new Emettitore();
-							ed.save(emettitore7);
-							log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
-							String tipoAbbonamento = input.nextLine();
-							if (tipoAbbonamento.equals("1")) {
-								Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
-										tesseraSelezionata, emettitore7);
-								ad.save(abb1);
-								log.info(
-										"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
-												+ abb1.getCodice_univoco());
-							} else if (tipoAbbonamento.equals("2")) {
-								Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE,
-										tesseraSelezionata, emettitore7);
-								ad.save(abb2);
-								log.info(
-										"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
-												+ abb2.getCodice_univoco());
-							} else {
-								log.info("Selezione numero errata");
-							}
-						}
-						if (tipoEmettitore2.equals("2")) {
-							Emettitore emettitore7 = new Emettitore();
-							ed.save(emettitore7);
-							log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
-							String tipoAbbonamento = input.nextLine();
-							if (tipoAbbonamento.equals("1")) {
-								Abbonamento abb1 = new Abbonamento(LocalDate.now(), Tipoabbonamento.SETTIMANALE,
-										tesseraSelezionata, emettitore7);
-								ad.save(abb1);
-							} else if (tipoAbbonamento.equals("2")) {
-								Abbonamento abb2 = new Abbonamento(LocalDate.now(), Tipoabbonamento.MENSILE, tesseraSelezionata,
-										emettitore7);
-								ad.save(abb2);
-							} else {
-								log.info("Selezione numero errata");
-							}
-						}
-							break;
-
-						case 3:
-							log.info(
-									"Oblitera il biglietto: inserisci il codice del biglietto, lo trovi scritto in alto a desta");
-						String codiceBiglietto = input.nextLine();
-						Biglietto cercaBiglietto = bd.findByCodiceUnivoco(Long.parseLong(codiceBiglietto));
-						if (cercaBiglietto.getData_obliterazione() != null) {
-							log.info("Il biglietto è già stato usato");
-						} else {
-							log.info("Inserisci il numero del tuo mezzo");
-						String codiceMezzo = input.nextLine();
-							bd.vidimazioneBiglietto1(Long.parseLong(codiceBiglietto), Long.parseLong(codiceMezzo));
-						}
-						break;
-					case 4:
-						log.info("Attiva l'abbonamento: inserisci il codice del tuo abbonamento");
-						String codiceAbbonamento = input.nextLine();
-						Abbonamento cercaAbbonamento = ad.findByCodiceUnivoco(Long.parseLong(codiceAbbonamento));
-						if (cercaAbbonamento.getData_obliterazione() != null) {
-							log.info("Il tuo abbonamento è già stato attivato!");
-						} else {
-						ad.attivazioneAbbonamento(Long.parseLong(codiceAbbonamento));
-						ad.dataScadenzaAbbonamento(Long.parseLong(codiceAbbonamento));
-					}
-						break;
-					default:
-						log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
-						continue operazione;
-					}
-					
-				}
-				break;
-			case 2:
-				ufficioBiglietteria: while (true) {
-					log.info(
-							"Che azione vuoi eseguire:\n 1 aggiungi un utente,\n 2 crea una tessera,\n 3 rinnovare la tessera,\n 4 info tratta,\n 0 per finire");
-					String azione2 = input.nextLine();
-					if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 4) {
-						log.info("Hai inserito un numero non valido.");
-					}
-					switch (Integer.parseInt(azione2)) {
-					case 0:
-						log.info("Hai finito");
-						break ufficioBiglietteria;
-					case 1:
-						log.info("Inserisci il nome dell'utente");
-						String nome = input.nextLine();
-						log.info("Inserisci il cognome dell'utente");
-						String cognome = input.nextLine();
-						log.info("Inserisci la data di nascita dell'utente");
-						String dateString = input.nextLine();
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-						LocalDate dataNascita = LocalDate.parse(dateString, formatter);
-						Utente ut10 = new Utente(nome, cognome, dataNascita);
-						ud.save(ut10);
-						log.info(ut10.toString());
-						break;
-					case 2:
-//						LocalDate emissione_tessera, Utente utente, Emettitore emettitore
-						log.info("Inserisci l'id dell'utente");
-						String numeroid = input.nextLine();
-						Long idutente = Long.parseLong(numeroid);
-						Utente utenteSelezionato = ud.findById(idutente);
-						Emettitore emettitore7 = new Emettitore();
-						ed.save(emettitore7);
-						// Implementare random
-						Tessera tessera1 = new Tessera(LocalDate.now(), utenteSelezionato, emettitore7);
-						td.save(tessera1);
-						break;
-					case 3:
-						log.info("Inserisci il codice tessera per rinnovarla");
-						String numeroTessera = input.nextLine();
-						td.rinnovoTessera(Long.parseLong(numeroTessera));
-						break;
-					case 4:
-						log.info("Nuovo mezzo! Inserisci il tipo di mezzo, 1 Autobus, 2 Tram");
-						String mezzoScelto = input.nextLine();
-						if (mezzoScelto.equals("1")) {
-							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
-							String statoMezzoScelto = input.nextLine();
-							if (statoMezzoScelto.equals("1")) {
-								Autobus nuovoAutobus = new Autobus(Stato.ATTIVO);
-								md.saveMezzo(nuovoAutobus);
-							} else if (statoMezzoScelto.equals("2")) {
-								Autobus nuovoAutobus = new Autobus(Stato.MANUTENZIONE);
-								md.saveMezzo(nuovoAutobus);
-							} else {
-								log.info("Il numero inserito non è valido");
-							}
-						} else if (mezzoScelto.equals("2")) {
-							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
-							String statoMezzoScelto2 = input.nextLine();
-							if (statoMezzoScelto2.equals("1")) {
-								Tram nuovoAutobus = new Tram(Stato.ATTIVO);
-								md.saveMezzo(nuovoAutobus);
-							} else if (statoMezzoScelto2.equals("2")) {
-								Tram nuovoAutobus = new Tram(Stato.MANUTENZIONE);
-								md.saveMezzo(nuovoAutobus);
-							} else {
-								log.info("Il numero inserito non è valido");
-							}
-						}
-						break;
-					default:
-						log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
-						continue ufficioBiglietteria;
-					}
-				}
-				break;
-			case 3:
-				amministratore: while (true) {
-					log.info(
-							"Che azione vuoi eseguire:\n 1 controlla lista manutenzioni,\n 2 numero biglietti obliterati su un mezzo,\n "
-									+ "3 rinnova tutte le tessere, "
-									+ "\n 4 mezzi che percorrono una tratta,\n 5 tempo effettivo che un mezzo impiega,"
-									+ "\n 6 aggiungi una tratta,\n 7 aggiungi un mezzo, \n 0 per finire");
-					String azione3 = input.nextLine();
-					if (Integer.parseInt(azione3) < 0 || Integer.parseInt(azione3) > 8) {
-						log.info("Hai inserito un numero non valido.");
-					}
-					switch (Integer.parseInt(azione3)) {
-					case 0:
-						log.info("Hai finito");
-						break amministratore;
-					case 1:
-						log.info("Inserisci il numero di mezzo che vuoi controllare");
-						String mezzoControllato1 = input.nextLine();
-						Mezzi findMezzo = md.getMezzoByCodice(Long.parseLong(mezzoControllato1));
-						List<Manutenzione> manutenzioneMezzo = findMezzo.getStorico_manutenzione();
-						for (Manutenzione elementi : manutenzioneMezzo) {
-							System.out.println("Il mezzo è stato in manutenzione per: " + elementi.getDurata_in_giorni()
-									+ " giorni, è tornato attivo il giorno: " + elementi.getFine_manutenzione()
-									+ "\n Codice della manutenzione: " + elementi.getCodice_manutenzione());
-						}
-						break;
-					case 2:
-						// Numero biglietti obliterati
-						biglietto: while (true) {
-							log.info(
-									"Inserisci il tipo di operazione: \n 1 n. biglietti vidiminati in un arco temporale\n 2 n. biglietti vidiminati in un arco temporale su un determinato mezzo \n "
-											+ "3 n. biglietti emessi da emettitore \n 4 n. biglietti emessi da emettitore in un arco temporale \n 0 per finire");
-							String operazione = input.nextLine();
-							if (Integer.parseInt(operazione) < 0 || Integer.parseInt(operazione) > 4) {
-								log.info("Hai inserito un numero non valido.");
-							}
-							switch (Integer.parseInt(operazione)) {
-							case 0:
-								log.info("Hai finito");
-								break biglietto;
-							case 1:
-								log.info("Scegli la data di inizio");
-								String inizio = input.nextLine();
-								DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-								LocalDate dataInizio = LocalDate.parse(inizio, formatter);
-								log.info("Scegli la data di fine");
-								String fine = input.nextLine();
-								LocalDate dataFine = LocalDate.parse(fine, formatter);
-								Long numeroB = bd.numeroBigliettiVimidatiInArcoTemporale(dataInizio, dataFine);
-								log.info("Biglietti emmessi nell'arco temporale " + Long.toString(numeroB));
-								break;
-							case 2:
-								log.info("Scegli la data di inizio");
-								String inizio1 = input.nextLine();
-								DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-								LocalDate dataInizio1 = LocalDate.parse(inizio1, formatter1);
-								log.info("Scegli la data di fine");
-								String fine1 = input.nextLine();
-								LocalDate dataFine1 = LocalDate.parse(fine1, formatter1);
-								log.info("\nInsierisci il codice identificativo del mezzo");
-								String mezzo = input.nextLine();
-								Long numeroBigliettiPerTempoEPerMezzo = bd
-										.numeroBigliettiVimidatiPerMezzoInArcoTemporale(
-										dataInizio1, dataFine1, Integer.parseInt(mezzo));
-								log.info("Biglietti emmessi nell'arco temporale "
-										+ Long.toString(numeroBigliettiPerTempoEPerMezzo));
-								break;
-							case 3:
-								log.info("Scegli l'emettitore");
-								String emettitore = input.nextLine();
-								int contaBigliettiPerEmettitore = bd
-										.trovaBigliettiPerEmettitore(Long.parseLong(emettitore)).size();
-								log.info("Numero tatale di biglietti emessi: "
-										+ Integer.toString(contaBigliettiPerEmettitore));
-								break;
-							case 4:
-								log.info("Scegli la data di inizio");
-								String inizio2 = input.nextLine();
-								DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-								LocalDate dataInizio2 = LocalDate.parse(inizio2, formatter2);
-								log.info("Scegli la data di fine");
-								String fine2 = input.nextLine();
-								LocalDate dataFine2 = LocalDate.parse(fine2, formatter2);
-								log.info("\nInsierisci il codice identificativo dell'emettitore");
-								String emettitoreId = input.nextLine();
-								Long numeroBigliettiPerTempoEPerEmettitore = bd.findBigliettiByTempoAndEmettitore(
-										Long.parseLong(emettitoreId), dataInizio2, dataFine2);
-								log.info("Biglietti emmessi nell'arco temporale dall'emettitore scelto: "
-										+ Long.toString(numeroBigliettiPerTempoEPerEmettitore));
-								break;
-							}
-						}
-					case 3:
-						log.info("Stai per rinnovare tutte le tessere, vuoi procedere? 1 Si, 2 No");
-						String rinnovare = input.nextLine();
-						if (rinnovare.equals("1")) {
-							td.rinnovoTutteTessereScadute();
-							log.info("Operazione eseguita con successo!");
-						} else if (rinnovare.equals("2")) {
-							log.info("Annulla l'operazione");
-						}
-						break;
-					case 4:
-//						mezzi che percorrono una tratta
-						log.info("Inserisci il numero di tratta che vuoi controllare");
-						String trattaControllata = input.nextLine();
-						Tratta findTratta = trd.findByCodiceTratta(Long.parseLong(trattaControllata));
-						List<Mezzi> findMezzi = findTratta.getMezzi();
-						for (Mezzi elementi : findMezzi) {
-							System.out.println("Mezzo che percorre la tratta:" + elementi.getCodice_mezzo());
-						}
-						break;
-					case 5:
-						// tempo effettivo che un mezzo impiega per una tratta
-						log.info("Inserisci il mezzo che vuoi controllare");
-						String mezzoControllato = input.nextLine();
-						md.selectTempoEffettivoCodiceMezzo(Long.parseLong(mezzoControllato));
-						break;
-					case 6:
-						// String partenza, String capolinea, Double t_medio
-						log.info("Nuova tratta: Inserisci il punto di partenza del mezzo");
-						String partenza = input.nextLine();
-						log.info("Inserisci il suo capolinea");
-						String capolinea = input.nextLine();
-						log.info("Inserisci il tempo di percorrenza");
-						String tMedio = input.nextLine();
-						Tratta nuovaTratta = new Tratta(partenza, capolinea, Double.parseDouble(tMedio));
-						trd.saveTratta(nuovaTratta);
-						break;
-					case 7:
-						// Inserimento mezzo
-						log.info("Nuovo mezzo! Inserisci il tipo di mezzo, 1 Autobus, 2 Tram");
-						String mezzoScelto = input.nextLine();
-						if (mezzoScelto.equals("1")) {
-							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
-							String statoMezzoScelto = input.nextLine();
-							if (statoMezzoScelto.equals("1")) {
-								Autobus nuovoAutobus = new Autobus(Stato.ATTIVO);
-								md.saveMezzo(nuovoAutobus);
-							} else if (statoMezzoScelto.equals("2")) {
-								Autobus nuovoAutobus = new Autobus(Stato.MANUTENZIONE);
-								md.saveMezzo(nuovoAutobus);
-							} else {
-								log.info("Il numero inserito non è valido");
-							}
-						} else if (mezzoScelto.equals("2")) {
-							log.info("Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
-							String statoMezzoScelto2 = input.nextLine();
-							if (statoMezzoScelto2.equals("1")) {
-								Tram nuovoAutobus = new Tram(Stato.ATTIVO);
-								md.saveMezzo(nuovoAutobus);
-							} else if (statoMezzoScelto2.equals("2")) {
-								Tram nuovoAutobus = new Tram(Stato.MANUTENZIONE);
-								md.saveMezzo(nuovoAutobus);
-							} else {
-								log.info("Il numero inserito non è valido");
-							}
-						}
-						break;
-					}
-					break;
-				}
-				break;
-			case 4:
-				log.info("Sei stato beccato dal controllore! Hai un abbonameno o un biglietto valido?");
+			try {
 				log.info(
-						"Inserisci:\n 1 per mostrare il biglietto,\n 2 per mostrare l'abbonamento,\n Qualunue altro numero per tentare la fuga!");
-				String evitaLaMulta = input.nextLine();
-				if (evitaLaMulta.equals("1")) {
-					log.info("Hai validato il tuo biglietto?");
-					log.info("Inserisci il tuo codice biglietto");
-					String evitaMultaBiglietto = input.nextLine();
-					Biglietto cercaBiglietto1 = bd.findByCodiceUnivoco(Long.parseLong(evitaMultaBiglietto));
-					if (cercaBiglietto1.getData_obliterazione() != null) {
-						if (cercaBiglietto1.getData_obliterazione().equals(LocalDate.now())) {
-							log.info("Il tuo biglietto è valido, sei salvo!");
-						} else {
-							log.info("Stai viaggiando con un biglietto vecchio! 100 euro volano via dal porafoglio!");
+						"Benvenuto, chi sei?\n 1 utente,\n 2 Ufficio biglietteria,\n 3 amministratore,\n 4 controllore,\n 0 per uscire");
+				String persona = input.nextLine();
+				if (Integer.parseInt(persona) < 0 || Integer.parseInt(persona) > 4) {
+					log.info("Hai inserito un numero non valido.");
+				} else if (Integer.parseInt(persona) >= 0 || Integer.parseInt(persona) <= 4) {
+					switch (Integer.parseInt(persona)) {
+					case 0:
+						log.info("Hai finito");
+						break utilizzatore;
+					case 1:
+						operazione: while (true) {
+							try {
+								log.info("Benvenuto utente: che azione vuoi eseguire:\n 1 compra un biglietto,\n "
+										+ "2 compra un abbonamento,\n 3 obliterare il biglietto,\n "
+										+ "4 attiva abbonamento,\n 0 per finire");
+								String azione = input.nextLine();
+								if (Integer.parseInt(azione) < 0 || Integer.parseInt(azione) > 4) {
+									log.info("Hai inserito un numero non valido.");
+								} else if (Integer.parseInt(azione) >= 0 || Integer.parseInt(azione) <= 4) {
+									switch (Integer.parseInt(azione)) {
+									case 0:
+										log.info("Hai finito");
+										break operazione;
+									case 1:
+										try {
+											log.info(
+													"Compra il biglietto: Sei da \n 1 distributore \n 2 rivenditore auttorizzato");
+											String tipoEmettitore = input.nextLine();
+											if (tipoEmettitore.equals("1")) {
+												Emettitore emettitore7 = new Emettitore();
+												ed.save(emettitore7);
+												Biglietto b1 = new Biglietto(LocalDate.now(), emettitore7);
+												// random emettitore nella lista distributori
+												bd.save(b1);
+											} else if (tipoEmettitore.equals("2")) {
+												Emettitore emettitore8 = new Emettitore();
+												ed.save(emettitore8);
+												Biglietto b1 = new Biglietto(LocalDate.now(), emettitore8);
+												bd.save(b1);
+												// random emettitore nella lista distributori
+											} else {
+												log.info("Selezione numero errata");
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante la scelta dell'emettitore");
+										}
+										break;
+									case 2:
+										try {
+											log.info("Compra abbonamento: Inserisci il tuo numero tessera");
+											String numeroTessera = input.nextLine();
+											Long numeroTessera1 = Long.parseLong(numeroTessera);
+											Tessera tesseraSelezionata = td.findByCodiceTessera(numeroTessera1);
+											if (tesseraSelezionata != null) {
+												log.info("Sei da \n 1 distributore \n 2 rivenditore auttorizzato");
+												String tipoEmettitore2 = input.nextLine();
+												if (tipoEmettitore2.equals("1")) {
+													Emettitore emettitore7 = new Emettitore();
+													ed.save(emettitore7);
+													log.info("Scegli il tuo abbonamento:\n 1 SETTIMANALE,\n 2 MENSILE");
+													String tipoAbbonamento = input.nextLine();
+													if (tipoAbbonamento.equals("1")) {
+														Abbonamento abb1 = new Abbonamento(LocalDate.now(),
+																Tipoabbonamento.SETTIMANALE, tesseraSelezionata,
+																emettitore7);
+														ad.save(abb1);
+														log.info(
+																"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
+																		+ abb1.getCodice_univoco());
+													} else if (tipoAbbonamento.equals("2")) {
+														Abbonamento abb2 = new Abbonamento(LocalDate.now(),
+																Tipoabbonamento.MENSILE, tesseraSelezionata,
+																emettitore7);
+														ad.save(abb2);
+														log.info(
+																"Conserva il tuo codice abbonamento ti servirà all'attivazione. \n Il codice è: "
+																		+ abb2.getCodice_univoco());
+													} else {
+														log.info("Selezione numero errata");
+													}
+												}
+												if (tipoEmettitore2.equals("2")) {
+													Emettitore emettitore7 = new Emettitore();
+													ed.save(emettitore7);
+													log.info("Scegli il tuo abbonamento: SETTIMANALE(1), MENSILE(2)");
+													String tipoAbbonamento = input.nextLine();
+													if (tipoAbbonamento.equals("1")) {
+														Abbonamento abb1 = new Abbonamento(LocalDate.now(),
+																Tipoabbonamento.SETTIMANALE, tesseraSelezionata,
+																emettitore7);
+														ad.save(abb1);
+													} else if (tipoAbbonamento.equals("2")) {
+														Abbonamento abb2 = new Abbonamento(LocalDate.now(),
+																Tipoabbonamento.MENSILE, tesseraSelezionata,
+																emettitore7);
+														ad.save(abb2);
+													} else {
+														log.info("Selezione numero errata");
+													}
+												}
+											} else {
+												log.info("Tessera non trovata");
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante l'inserimento per comprare la tessera");
+										}
+										break;
+									case 3:
+										try {
+											log.info(
+													"Oblitera il biglietto: inserisci il codice del biglietto, lo trovi scritto in alto a desta");
+											String codiceBiglietto = input.nextLine();
+											Biglietto cercaBiglietto = bd
+													.findByCodiceUnivoco(Long.parseLong(codiceBiglietto));
+											if (cercaBiglietto.getData_obliterazione() != null) {
+												log.info("Il biglietto è già stato usato");
+											} else {
+												log.info("Inserisci il numero del tuo mezzo");
+												String codiceMezzo = input.nextLine();
+												bd.vidimazioneBiglietto1(Long.parseLong(codiceBiglietto),
+														Long.parseLong(codiceMezzo));
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante l'inserimento per obliterare il biglietto");
+										}
+										break;
+									case 4:
+										try {
+											log.info("Attiva l'abbonamento: inserisci il codice del tuo abbonamento");
+											String codiceAbbonamento = input.nextLine();
+											Abbonamento cercaAbbonamento = ad
+													.findByCodiceUnivoco(Long.parseLong(codiceAbbonamento));
+											if (cercaAbbonamento.getData_obliterazione() != null) {
+												log.info("Il tuo abbonamento è già stato attivato!");
+											} else {
+												ad.attivazioneAbbonamento(Long.parseLong(codiceAbbonamento));
+												ad.dataScadenzaAbbonamento(Long.parseLong(codiceAbbonamento));
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante l'inserimento per comprare l'abbonamento");
+										}
+										break;
+									default:
+										log.info("Hai inserito un numero non elencato");
+										break;
+									}
+								} else {
+									log.info("Hai inserito un carattere non valido nella scelta dell'operazione");
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								log.info("Errore durante la scelta dell'operazione utente");
+							}
 						}
-					} else {
-						log.info("Furbetto, non hai validato il tuo biglietto... 100 euro volano via dal porafoglio!");
-					}
-				} else if (evitaLaMulta.equals("2")) {
-					log.info("Hai scelto l'abbonamento: inserisci il tuo codice di tessera");
-					String evitaLaMultaAbbonamento = input.nextLine();
-					ad.controlloAbbonamento(Long.parseLong(evitaLaMultaAbbonamento));
-				} else {
-					log.info(
-							"Tentativo fallito!!\n Totale Multa = 110 euro (10 euro in più per la tentata fuga!), \n Vergognati!");
-				}
-				break;
-			default:
-				log.info("Attenzione, inserimento numero sbagliato o carattere sbagliato");
-				continue utilizzatore;
-	
-			// input.close();
-//			em.close();
-//			emf.close();
-		}
+						break;
+					case 2:
+						ufficioBiglietteria: while (true) {
+							try {
+								log.info(
+										"Ufficio Biglietteria: Che azione vuoi eseguire:\n 1 aggiungi un utente,\n 2 crea una tessera,\n 3 rinnovare la tessera,\n 0 per finire");
+								String azione2 = input.nextLine();
+								if (Integer.parseInt(azione2) < 0 || Integer.parseInt(azione2) > 3) {
+									log.info("Hai inserito un numero non valido.");
+								} else if (Integer.parseInt(azione2) >= 0 || Integer.parseInt(azione2) <= 3) {
+									switch (Integer.parseInt(azione2)) {
+									case 0:
+										log.info("Hai finito");
+										break ufficioBiglietteria;
+									case 1:
+										try {
+											log.info("Creare l'utente: Inserisci il nome dell'utente");
+											String nome = input.nextLine();
+											log.info("Inserisci il cognome dell'utente");
+											String cognome = input.nextLine();
+											log.info("Inserisci la data di nascita dell'utente");
+											String dateString = input.nextLine();
+											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+											LocalDate dataNascita = LocalDate.parse(dateString, formatter);
+											Utente ut10 = new Utente(nome, cognome, dataNascita);
+											ud.save(ut10);
+											log.info(ut10.toString());
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante l'inserimento per creare l'utente");
+										}
+										break;
+									case 2:
+										try {
+											log.info("Creare la tessera: Inserisci l'id dell'utente");
+											String numeroid = input.nextLine();
+											Long idutente = Long.parseLong(numeroid);
+											Utente utenteSelezionato = ud.findById(idutente);
+										Emettitore emettitore7 = new Emettitore();
+										ed.save(emettitore7);
+										// Implementare random
+										Tessera tessera1 = new Tessera(LocalDate.now(), utenteSelezionato, emettitore7);
+										td.save(tessera1);
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante l'inserimento per creare la tessera");
+									}
+									break;
+								case 3:
+									try {
+										log.info("Rinnovamento tessera: \n Inserisci il codice tessera per rinnovarla");
+										String numeroTessera = input.nextLine();
+										td.rinnovoTessera(Long.parseLong(numeroTessera));
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info(
+												"Errore durante il rinnovamento tessera, controlla il tuo codice tessera");
+									}
+									break;
+								default:
+									log.info("Hai inserito un numero non elencato");
+								}
+							} else {
+								log.info(
+										"Hai inserito un carattere non valido nella scelta dell'azione della Biglietteria");
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							log.info("Errore durante la scelta dell'operazione biglietteria");
+						}
 
+						}
+						break;
+					case 3:
+						amministratore: while (true) {
+							try {
+							log.info(
+									"Che azione vuoi eseguire:\n 1 controlla lista manutenzioni,\n 2 numero biglietti obliterati su un mezzo,\n "
+											+ "3 rinnova tutte le tessere, "
+											+ "\n 4 mezzi che percorrono una tratta,\n 5 tempo effettivo che un mezzo impiega,"
+											+ "\n 6 aggiungi una tratta,\n 7 aggiungi un mezzo, \n 0 per finire");
+							String azione3 = input.nextLine();
+							if (Integer.parseInt(azione3) < 0 || Integer.parseInt(azione3) > 7) {
+								log.info("Hai inserito un numero non valido.");
+							} else if (Integer.parseInt(azione3) >= 0 || Integer.parseInt(azione3) <= 7) {
+								switch (Integer.parseInt(azione3)) {
+								case 0:
+									log.info("Hai finito");
+									break amministratore;
+								case 1:
+									try {
+										log.info("Manutenzioni: Inserisci il numero di mezzo che vuoi controllare");
+										String mezzoControllato1 = input.nextLine();
+										Mezzi findMezzo = md.getMezzoByCodice(Long.parseLong(mezzoControllato1));
+										List<Manutenzione> manutenzioneMezzo = findMezzo.getStorico_manutenzione();
+										for (Manutenzione elementi : manutenzioneMezzo) {
+											System.out.println("Il mezzo è stato in manutenzione per: "
+													+ elementi.getDurata_in_giorni()
+													+ " giorni, è tornato attivo il giorno: "
+													+ elementi.getFine_manutenzione() + "\n Codice della manutenzione: "
+													+ elementi.getCodice_manutenzione());
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore nell'inserimento per la ricerca del mezzo");
+									}
+									break;
+								case 2:
+									biglietto: while (true) {
+										try {
+											log.info(
+													"Inserisci il tipo di operazione: \n 1 n. biglietti vidiminati in un arco temporale\n 2 n. biglietti vidiminati in un arco temporale su un determinato mezzo \n "
+															+ "3 n. biglietti emessi da emettitore \n 4 n. biglietti emessi da emettitore in un arco temporale \n 0 per finire");
+											String operazione = input.nextLine();
+											if (Integer.parseInt(operazione) < 0 || Integer.parseInt(operazione) > 4) {
+												log.info("Hai inserito un numero non valido.");
+											} else if (Integer.parseInt(operazione) >= 0
+													|| Integer.parseInt(operazione) <= 4) {
+												switch (Integer.parseInt(operazione)) {
+												case 0:
+													log.info("Hai finito");
+													break biglietto;
+												case 1:
+													try {
+														log.info(
+																"Numero biglietti validati in un determinato periodo di tempo:\n Scegli la data di inizio");
+														String inizio = input.nextLine();
+														DateTimeFormatter formatter = DateTimeFormatter
+																.ofPattern("yyyy-MM-dd");
+														LocalDate dataInizio = LocalDate.parse(inizio, formatter);
+														log.info("Scegli la data di fine");
+														String fine = input.nextLine();
+														LocalDate dataFine = LocalDate.parse(fine, formatter);
+														Long numeroB = bd.numeroBigliettiVimidatiInArcoTemporale(
+																dataInizio, dataFine);
+														log.info("Biglietti emmessi nell'arco temporale "
+																+ Long.toString(numeroB));
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.info(
+																"Errore durante l'inserimento per cercare i biglietti");
+													}
+													break;
+												case 2:
+													try {
+														log.info(
+																"Biglietti validati su un mezzo e in un determinato periodo di tempo:\n Scegli la data di inizio");
+														String inizio1 = input.nextLine();
+														DateTimeFormatter formatter1 = DateTimeFormatter
+																.ofPattern("yyyy-MM-dd");
+														LocalDate dataInizio1 = LocalDate.parse(inizio1, formatter1);
+														log.info("Scegli la data di fine");
+														String fine1 = input.nextLine();
+														LocalDate dataFine1 = LocalDate.parse(fine1, formatter1);
+														log.info("\nInsierisci il codice identificativo del mezzo");
+														String mezzo = input.nextLine();
+														Long numeroBigliettiPerTempoEPerMezzo = bd
+																.numeroBigliettiVimidatiPerMezzoInArcoTemporale(
+																		dataInizio1, dataFine1,
+																		Integer.parseInt(mezzo));
+														log.info("Biglietti emmessi nell'arco temporale "
+																+ Long.toString(numeroBigliettiPerTempoEPerMezzo));
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.info(
+																"Errore durante l'inserimento per cercare i biglietti");
+													}
+													break;
+												case 3:
+													try {
+														log.info("Numero di biglietti emessi:\n Scegli l'emettitore");
+														String emettitore = input.nextLine();
+														int contaBigliettiPerEmettitore = bd
+																.trovaBigliettiPerEmettitore(Long.parseLong(emettitore))
+																.size();
+														log.info("Numero tatale di biglietti emessi: "
+																+ Integer.toString(contaBigliettiPerEmettitore));
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.info(
+																"Errore durante l'inserimento per cercare gli emettitori");
+													}
+													break;
+												case 4:
+													try {
+														log.info(
+																"Numero di biglietti emessi in un determinato periodo di tempo:\n Scegli la data di inizio");
+														String inizio2 = input.nextLine();
+														DateTimeFormatter formatter2 = DateTimeFormatter
+																.ofPattern("yyyy-MM-dd");
+														LocalDate dataInizio2 = LocalDate.parse(inizio2, formatter2);
+														log.info("Scegli la data di fine");
+														String fine2 = input.nextLine();
+														LocalDate dataFine2 = LocalDate.parse(fine2, formatter2);
+														log.info(
+																"\nInsierisci il codice identificativo dell'emettitore");
+														String emettitoreId = input.nextLine();
+														Long numeroBigliettiPerTempoEPerEmettitore = bd
+																.findBigliettiByTempoAndEmettitore(
+																		Long.parseLong(emettitoreId), dataInizio2,
+																		dataFine2);
+														log.info(
+																"Biglietti emmessi nell'arco temporale dall'emettitore scelto: "
+																		+ Long.toString(
+																				numeroBigliettiPerTempoEPerEmettitore));
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.info(
+																"Errore durante l'inserimento per cercare il numero di biglietti emessi");
+													}
+													break;
+												default:
+													log.info("Hai inserito un numero non elencato");
+												}
+											} else {
+												log.info(
+														"Hai inserito un carattere non valido nella scelta operazione Biglietto");
+											}
+										} catch (Exception e) {
+											e.printStackTrace();
+											log.info("Errore durante la scelta dell'operazione biglietto");
+										}
+
+									}
+									break;
+								case 3:
+									log.info("Stai per rinnovare tutte le tessere, vuoi procedere? 1 Si, 2 No");
+									String rinnovare = input.nextLine();
+									if (rinnovare.equals("1")) {
+										td.rinnovoTutteTessereScadute();
+										log.info("Operazione eseguita con successo!");
+									} else if (rinnovare.equals("2")) {
+										log.info("Annulla l'operazione");
+									} else {
+										log.info("Errore durante il rinnovo tessere, inserire il numero richiesto");
+									}
+									break;
+								case 4:
+									try {
+										log.info(
+												"Mezzi in una tratta:\n Inserisci il numero di tratta che vuoi controllare");
+										String trattaControllata = input.nextLine();
+										Tratta findTratta = trd.findByCodiceTratta(Long.parseLong(trattaControllata));
+										List<Mezzi> findMezzi = findTratta.getMezzi();
+										for (Mezzi elementi : findMezzi) {
+											System.out.println(
+													"Mezzo che percorre la tratta:" + elementi.getCodice_mezzo());
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante l'inserimento del numero di tratta");
+									}
+									break;
+								case 5:
+									try {
+										log.info("Tempo effettivo: Inserisci il mezzo che vuoi controllare");
+										String mezzoControllato = input.nextLine();
+										md.selectTempoEffettivoCodiceMezzo(Long.parseLong(mezzoControllato));
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante l'inserimento del mezzo");
+									}
+									break;
+								case 6:
+									try {
+										log.info("Nuova tratta: Inserisci il punto di partenza del mezzo");
+										String partenza = input.nextLine();
+										log.info("Inserisci il suo capolinea");
+										String capolinea = input.nextLine();
+										log.info("Inserisci il tempo di percorrenza");
+										String tMedio = input.nextLine();
+										Tratta nuovaTratta = new Tratta(partenza, capolinea,
+												Double.parseDouble(tMedio));
+										trd.saveTratta(nuovaTratta);
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante l'inserimento per l'inserimento della nuova tratta");
+									}
+									break;
+								case 7:
+									try {
+										log.info("Nuovo mezzo! Inserisci il tipo di mezzo, 1 Autobus, 2 Tram");
+										String mezzoScelto = input.nextLine();
+										if (mezzoScelto.equals("1")) {
+											log.info(
+													"Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+											String statoMezzoScelto = input.nextLine();
+											if (statoMezzoScelto.equals("1")) {
+												Autobus nuovoAutobus = new Autobus(Stato.ATTIVO);
+												md.saveMezzo(nuovoAutobus);
+											} else if (statoMezzoScelto.equals("2")) {
+												Autobus nuovoAutobus = new Autobus(Stato.MANUTENZIONE);
+												md.saveMezzo(nuovoAutobus);
+											} else {
+												log.info("Il numero inserito non è valido");
+											}
+										} else if (mezzoScelto.equals("2")) {
+											log.info(
+													"Nuovo mezzo! Inserisci lo stato del tuo mezzo, 1 attivo, 2 manutenzione");
+											String statoMezzoScelto2 = input.nextLine();
+											if (statoMezzoScelto2.equals("1")) {
+												Tram nuovoAutobus = new Tram(Stato.ATTIVO);
+												md.saveMezzo(nuovoAutobus);
+											} else if (statoMezzoScelto2.equals("2")) {
+												Tram nuovoAutobus = new Tram(Stato.MANUTENZIONE);
+												md.saveMezzo(nuovoAutobus);
+											} else {
+												log.info("Il numero inserito non è valido");
+											}
+										} else {
+											log.info("Inserimento errato durante la carezione del mezzo!");
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.info("Errore durante l'inserimento per l'inserimento del nuovo mezzo");
+									}
+									break;
+								default:
+									log.info("Hai inserito un numero non elencato");
+									continue;
+								}
+							} else {
+								log.info(
+										"Hai inserito un carattere non valido nella scelta dell'azione della Biglietteria");
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							log.info("Errore durante la scelta dell'operazione dell'amministratore");
+						}
+						}
+						break;
+					case 4:
+						log.info("Sei stato beccato dal controllore! Hai un abbonameno o un biglietto valido?");
+						log.info(
+								"Inserisci:\n 1 per mostrare il biglietto,\n 2 per mostrare l'abbonamento,\n Qualunue altro numero per tentare la fuga!");
+						String evitaLaMulta = input.nextLine();
+						try {
+						if (evitaLaMulta.equals("1")) {
+							log.info("Hai validato il tuo biglietto?");
+							log.info("Inserisci il tuo codice biglietto");
+							String evitaMultaBiglietto = input.nextLine();
+							Biglietto cercaBiglietto1 = bd.findByCodiceUnivoco(Long.parseLong(evitaMultaBiglietto));
+							if (cercaBiglietto1.getData_obliterazione() != null) {
+								if (cercaBiglietto1.getData_obliterazione().equals(LocalDate.now())) {
+									log.info("Il tuo biglietto è valido, sei salvo!");
+								} else {
+									log.info(
+											"Stai viaggiando con un biglietto vecchio! 100 euro volano via dal porafoglio!");
+								}
+							} else {
+								log.info(
+										"Furbetto, non hai validato il tuo biglietto... 100 euro volano via dal porafoglio!");
+							}
+						} else if (evitaLaMulta.equals("2")) {
+							log.info("Hai scelto l'abbonamento: inserisci il tuo codice di tessera");
+							String evitaLaMultaAbbonamento = input.nextLine();
+							ad.controlloAbbonamento(Long.parseLong(evitaLaMultaAbbonamento));
+						} else {
+							log.info(
+									"Tentativo fallito!!\n Totale Multa = 110 euro (10 euro in più per la tentata fuga!), \n Vergognati!");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						log.info("Errore durante l'inserimento del biglietto");
+						log.info("Sei riuscito a fuggire!");
+					}
+						break;
+				    
+					default:
+						log.info("Hai inserito un numero non elencato");
+					}
+				} else {
+					log.info("Hai inserito un carattere non valido nella scelta dell'utilizzatore");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.info("Errore durante l'inserimento della persona");
+			}
 		}
-		
+		input.close();
+		em.close();
+		emf.close();
+
 	}
 }
 
