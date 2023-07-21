@@ -1,36 +1,18 @@
 package week16BW.main;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Scanner;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import week16BW.emettitori.Distributore;
-import week16BW.emettitori.Emettitore;
 import week16BW.emettitori.EmettitoreDAO;
-import week16BW.enu.Tipoabbonamento;
-import week16BW.manutenzione.Manutenzione;
 import week16BW.manutenzione.ManutenzioneDAO;
-import week16BW.mezzi.Autobus;
-import week16BW.mezzi.Mezzi;
 import week16BW.mezzi.MezziDao;
-import week16BW.mezzi.Stato;
-import week16BW.mezzi.Tram;
-import week16BW.tesserautente.Tessera;
 import week16BW.tesserautente.TesseraDAO;
-import week16BW.tesserautente.Utente;
 import week16BW.tesserautente.UtenteDAO;
-import week16BW.titoloviaggio.Abbonamento;
 import week16BW.titoloviaggio.AbbonamentoDAO;
-import week16BW.titoloviaggio.Biglietto;
 import week16BW.titoloviaggio.BigliettoDAO;
-import week16BW.tratta.Tratta;
 import week16BW.tratta.TrattaDao;
 import week16BW.utils.JpaUtil;
 
@@ -50,11 +32,20 @@ public class Main {
 		ManutenzioneDAO ma = new ManutenzioneDAO(em);
 
 		// CREAZIONE RANDOM ISTANZE Personaggi
-//		for (int i = 0; i < 100; i++) {
-//			ud.save(ud.creaUtente(i));
-//		}
-
+		for (int i = 0; i < 100; i++) {
+			ud.save(ud.creaUtente(i));
+		}
+		// CREAZIONE RANDOM ISTANZE EMETTITORE
 		ed.save(15);
+
+		// CREAZIONE RANDOM ISTANZE TESSERE
+		td.save(5);
+
+		// CREAZIONE RANDOM ISTANZE BIGLIETTO
+		bd.save(60);
+
+		// CREAZIONE RANDOM ISTANZE ABBONAMENTO
+		ad.save(40);
 		// Creazione utente, emettitore
 //		Utente ut1 = new Utente("B", "G", LocalDate.of(1993, 05, 28));
 //		Utente ut2 = new Utente("C", "H", LocalDate.of(1988, 07, 06));
@@ -62,21 +53,21 @@ public class Main {
 //		Utente ut4 = new Utente("E", "L", LocalDate.of(1996, 03, 26));
 //		Utente ut5 = new Utente("F", "M", LocalDate.of(1989, 04, 16));
 //		Utente ut6 = new Utente("G", "N", LocalDate.of(2000, 8, 6));
-		Emettitore emettitore1 = new Emettitore();
-		Emettitore emettitore3 = new Emettitore();
-		Distributore emettitore2 = new Distributore(true);
-		Distributore emettitore4 = new Distributore(true);
+//		Emettitore emettitore1 = new Emettitore();
+//		Emettitore emettitore3 = new Emettitore();
+//		Distributore emettitore2 = new Distributore(true);
+//		Distributore emettitore4 = new Distributore(true);
 //		ud.save(ut1);
 //		ud.save(ut2);
 //		ud.save(ut3);
 //		ud.save(ut4);
 //		ud.save(ut5);
 //		ud.save(ut6);
-		ed.save(emettitore1);
-		ed.save(emettitore2);
-		ed.save(emettitore3);
-		ed.save(emettitore4);
-		td.save(5);
+//		ed.save(emettitore1);
+//		ed.save(emettitore2);
+//		ed.save(emettitore3);
+//		ed.save(emettitore4);
+
 //
 ////		// Crea tessera e biglietto
 ////		Tessera tess1 = new Tessera(LocalDate.of(2021, 4, 02), ut1, emettitore1);
@@ -92,15 +83,15 @@ public class Main {
 //		td.save(tess5);
 //		td.save(tess6);
 		// Creazione istanze per biglietto
-		Biglietto biglietto1 = new Biglietto(LocalDate.of(2023, 04, 17), emettitore1);
-		Biglietto biglietto2 = new Biglietto(LocalDate.of(2023, 04, 19), emettitore1);
-		Biglietto biglietto3 = new Biglietto(LocalDate.of(2022, 04, 20), emettitore1);
-		Biglietto biglietto4 = new Biglietto(LocalDate.of(2021, 05, 9), emettitore2);
-		// Salvataggio biglietti a DB
-		bd.save(biglietto1);
-		bd.save(biglietto2);
-		bd.save(biglietto3);
-		bd.save(biglietto4);
+//		Biglietto biglietto1 = new Biglietto(LocalDate.of(2023, 04, 17), emettitore1);
+//		Biglietto biglietto2 = new Biglietto(LocalDate.of(2023, 04, 19), emettitore1);
+//		Biglietto biglietto3 = new Biglietto(LocalDate.of(2022, 04, 20), emettitore1);
+//		Biglietto biglietto4 = new Biglietto(LocalDate.of(2021, 05, 9), emettitore2);
+//		// Salvataggio biglietti a DB
+//		bd.save(biglietto1);
+//		bd.save(biglietto2);
+//		bd.save(biglietto3);
+//		bd.save(biglietto4);
 
 		// Creo Abbonamento
 		// Creazione istanze per abbonamento
@@ -124,7 +115,7 @@ public class Main {
 //		trd.saveTratta(route1);
 //		trd.saveTratta(route2);
 //		// CREAZIONE RANDOM ISTANZE MEZZI
-//		md.saveMezzo(20);
+		md.saveMezzo(20);
 
 //		// CREAZIONE MANUALE ISTANZE MEZZI
 //

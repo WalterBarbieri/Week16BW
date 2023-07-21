@@ -134,6 +134,7 @@ public class MezziDao {
 						manutenzione.setDurata_in_giorni(giorniManutenzione);
 						LocalDate fine_manutenzione = ora.plusDays(giorniManutenzione);
 						manutenzione.setFine_manutenzione(fine_manutenzione);
+						manutenzione.setDescrizione("Manutenzione Ordinaria Periodica");
 						em.persist(manutenzione);
 						if (mezzo.getStorico_manutenzione() == null) {
 							mezzo.setStorico_manutenzione(new ArrayList<>());

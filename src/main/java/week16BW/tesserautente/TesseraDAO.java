@@ -2,6 +2,7 @@ package week16BW.tesserautente;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -116,6 +117,22 @@ public class TesseraDAO {
 			e.printStackTrace();
 			log.info("Errore durante la ricerca dell'elenco tessere");
 		}
+	}
+
+	public Tessera rndTessera() {
+
+		Random rnd = new Random();
+		try {
+			TypedQuery<Tessera> getAllQuery = em.createQuery("SELECT a FROM Tessera a", Tessera.class);
+			List<Tessera> tessere = getAllQuery.getResultList();
+			Tessera rndTessere = tessere.get(Math.abs(rnd.nextInt(tessere.size())));
+			return rndTessere;
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore nella ricerca della tessera");
+			return null;
+		}
+
 	}
 
 }

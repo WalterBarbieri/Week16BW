@@ -1,15 +1,21 @@
 package week16BW.titoloviaggio;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import week16BW.emettitori.Emettitore;
+import week16BW.emettitori.EmettitoreDAO;
+import week16BW.utils.JpaUtil;
 
 public class BigliettoDAO {
 	private final EntityManager em;
@@ -23,6 +29,10 @@ public class BigliettoDAO {
 		return em;
 	}
 
+	private static EntityManagerFactory emf = JpaUtil.getEntityManagerFactory();
+	EntityManager em1 = emf.createEntityManager();
+	EmettitoreDAO ed = new EmettitoreDAO(em1);
+
 	// ----------Salva elemento nel DataBase -------------------
 	public void save(Biglietto b) {
 		EntityTransaction t = em.getTransaction();
@@ -32,6 +42,42 @@ public class BigliettoDAO {
 
 		t.commit();
 		System.out.println("Biglietto registrato correttamente\n");
+	}
+
+	public void save(int number) {
+		EntityTransaction t = em.getTransaction();
+		t.begin();
+		Emettitore emettitore = ed.rndEmettitore();
+		try {
+			for (int i = 0; i < number; i++) {
+				Biglietto biglietto = new Biglietto();
+				biglietto.setActive(true);
+				biglietto.setEmettitore(emettitore);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				long meseEmissioneLong = Math.round(Math.random() * 6 + 1);
+				String meseEmissione;
+				if (meseEmissioneLong < 10) {
+					meseEmissione = "0" + Long.toString(meseEmissioneLong);
+				} else
+					meseEmissione = Long.toString(meseEmissioneLong);
+				long giornoEmissioneLong = Math.round(Math.random() * 20 + 1);
+				String giornoEmissione;
+				if (giornoEmissioneLong < 10) {
+					giornoEmissione = "0" + Long.toString(giornoEmissioneLong);
+				} else
+					giornoEmissione = Long.toString(giornoEmissioneLong);
+				String emissioneStringa = "2023" + "-" + meseEmissione + "-" + giornoEmissione;
+				LocalDate emissione = LocalDate.parse(emissioneStringa, formatter);
+				biglietto.setData_emissione(emissione);
+
+				em.persist(biglietto);
+				log.info("Biglietto emesso correttamente");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("Errore nell'emissione del biglietto");
+		}
+		t.commit();
 	}
 
 	public Biglietto findByCodiceUnivoco(long codice_univoco) {
@@ -46,12 +92,10 @@ public class BigliettoDAO {
 
 	public Long findBigliettiByEmettitore(long codice_emettitore) {
 		try {
-			TypedQuery<Long> query = em
-					.createQuery(
-							"SELECT COUNT(c) FROM Biglietto c WHERE emettitore_id = :codiceemettitore",
-							Long.class);
+			TypedQuery<Long> query = em.createQuery(
+					"SELECT COUNT(c) FROM Biglietto c WHERE emettitore_id = :codiceemettitore", Long.class);
 			query.setParameter("codiceemettitore", codice_emettitore);
-			return  query.getSingleResult();
+			return query.getSingleResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("Nessun biglietto trovato");
@@ -144,7 +188,7 @@ public class BigliettoDAO {
 			log.info("Biglietto non trovato");
 		}
 	}
-	
+
 	// ------------ Data vidimazione biglietti 1--------------------
 
 	public void dataVidimazioneBiglietto1(long id) {
@@ -165,7 +209,8 @@ public class BigliettoDAO {
 	// ------------ Biglietti emessi da un dato emettitore --------------------
 
 	public List<Biglietto> trovaBigliettiPerEmettitore(long id) {
-		TypedQuery<Biglietto> getAllQuery = em.createQuery("SELECT b FROM Biglietto b WHERE emettitore_id = :id", Biglietto.class);
+		TypedQuery<Biglietto> getAllQuery = em.createQuery("SELECT b FROM Biglietto b WHERE emettitore_id = :id",
+				Biglietto.class);
 		getAllQuery.setParameter("id", id);
 		return getAllQuery.getResultList();
 	}
@@ -221,8 +266,7 @@ public class BigliettoDAO {
 	public void aggiuntaMezzoInObliterazione(long id, long codice_mezzo) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
-		Query q = em.createQuery(
-				"UPDATE Biglietto b SET mezzo_id = :codice_mezzo WHERE codice_univoco = :id ");
+		Query q = em.createQuery("UPDATE Biglietto b SET mezzo_id = :codice_mezzo WHERE codice_univoco = :id ");
 		q.setParameter("id", id);
 		q.setParameter("codice_mezzo", codice_mezzo);
 		int numeroModificati = q.executeUpdate();
